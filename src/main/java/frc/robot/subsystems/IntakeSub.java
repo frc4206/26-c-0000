@@ -4,10 +4,15 @@
 
 package frc.robot.subsystems;
 
+import org.team4206.battleaid.common.LoadableConfig;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSub extends SubsystemBase {
   /** Creates a new IntakeSub. */
+  /* Configs */
+  // ConfigTalonFX.Config intakeRollersMotor1Config = new ConfigTalonFX.Config("IntakeRollersMotor1.toml");
+
   public IntakeSub() {}
 
   @Override
