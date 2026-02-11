@@ -1,0 +1,17 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #0b132b;
+    color: #eaeaea;
+    text-align: center;
+    padding-top: 50px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+#voltage {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #4cc9f0;
+}
