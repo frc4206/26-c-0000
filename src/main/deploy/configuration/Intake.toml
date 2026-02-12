@@ -1,0 +1,8 @@
+# encoder goes here 
+
+stowPosition = 0.0
+homePosition = 0.0
+intakePosition = 0.0 
+
+intakePercent = 0.0
+outtakePercent = 0.0 

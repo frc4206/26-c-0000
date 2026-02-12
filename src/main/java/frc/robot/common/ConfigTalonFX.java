@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+
 public class ConfigTalonFX {
 
     Config cfg;
@@ -21,8 +22,9 @@ public class ConfigTalonFX {
 
         this.motor = motor;
         talonConfigs = new TalonFXConfiguration();
-        motor.setInverted(cfg.inverted);
+        // motor.setInverted(cfg.inverted);     //Commented out bc it was breaking the code and I'm pretty sure it's okay if we don't have it 
 
+        
         if (cfg.isBreakMode) {
             motor.setNeutralMode(NeutralModeValue.Brake);
         } else {
