@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,23 +17,35 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
-import frc.robot.commands.ShooterPercent_Com;
 import frc.robot.commands.IncrementSpeedTesting_Com;
-import frc.robot.commands.IncrementSlowDown_Com;
 import frc.robot.commands.IncrementSpeedUp_Com;
+import frc.robot.commands.ClimberJoystick_Com;
+import frc.robot.commands.PercentCommands.*;
 
 import frc.robot.generated.TunerConstants;
+
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ShooterSub;
+import frc.robot.subsystems.ClimberSub;
+import frc.robot.subsystems.HopperSub;
+import frc.robot.subsystems.IntakeSub;
 
 public class RobotContainer {
     /* Subsystems */
     public final ShooterSub.Config m_shooterConfig = new ShooterSub.Config("Shooter.toml");
+    public final ClimberSub.Config m_climberConfig = new ClimberSub.Config("Climber.toml"); 
+    public final HopperSub.Config m_hopperConfig = new HopperSub.Config("Hopper.toml"); 
+    public final IntakeSub.Config m_intakeConfig = new IntakeSub.Config("Intake.toml"); 
+
 
     final ShooterSub m_shooter = new ShooterSub(m_shooterConfig); 
+    final ClimberSub m_climber = new ClimberSub(m_climberConfig); 
+    final HopperSub m_hopper = new HopperSub(m_hopperConfig); 
+    final IntakeSub m_intake = new IntakeSub(m_intakeConfig); 
 
 
     private final CommandXboxController m_shooterController = new CommandXboxController(1);
+    private final CommandXboxController m_climberController = new CommandXboxController(2); 
 
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -91,10 +104,10 @@ public class RobotContainer {
 
         m_shooterController.y().onTrue(new ShooterPercent_Com(m_shooter, 0));
         m_shooterController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
-        m_shooterController.x().onTrue(new IncrementSpeedUp_Com(m_shooter)); 
-        m_shooterController.b().onTrue(new IncrementSlowDown_Com(m_shooter));
+        m_shooterController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.03)); 
+        m_shooterController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03));
 
-
+        m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
 
 
     }

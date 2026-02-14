@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import org.team4206.battleaid.common.LoadableConfig;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.CANcoder;
 
@@ -69,6 +70,12 @@ public class IntakeSub extends SubsystemBase {
   public void setPercentage_func(double percentage) {
     intakeRollersMotor1.setControl(new DutyCycleOut(percentage)); 
     intakeRollersMotor2.setControl(new DutyCycleOut(percentage)); 
+  }
+
+  public void setPosition_func(double pos) {
+    // intakePivtorMotor2.setPosition(intakePivotMotor1.getPosition().getValueAsDouble()); 
+    intakePivotMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
+    intakePivotMotor2.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
   }
 
   @Override

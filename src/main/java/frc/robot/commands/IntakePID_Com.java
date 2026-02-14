@@ -4,26 +4,28 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSub;
+import frc.robot.subsystems.IntakeSub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IncrementSpeedUp_Com extends Command {
+public class IntakePID_Com extends Command {
   /** Creates a new IntakePercent_Com. */
-  private ShooterSub m_shooter; 
-  private double m_increment; 
+  IntakeSub m_intakeSub; 
+  double m_intakePosition; 
 
-  public IncrementSpeedUp_Com(ShooterSub shooter, double increment) {
+  public IntakePID_Com(IntakeSub intakeSub, double intakePosition) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_shooter = shooter; 
-    m_increment = increment;
-    addRequirements(m_shooter);
+    m_intakeSub = intakeSub; 
+    m_intakePosition = intakePosition; 
+    addRequirements(intakeSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.incrementSpeedUp(m_increment);
+    m_intakeSub.setPosition_func(m_intakePosition);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -32,7 +34,10 @@ public class IncrementSpeedUp_Com extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_intakeSub.intakePivotMotor1.setControl(new DutyCycleOut(0)); 
+    m_intakeSub.intakePivotMotor2.setControl(new DutyCycleOut(0)); 
+  }
 
   // Returns true when the command should end.
   @Override

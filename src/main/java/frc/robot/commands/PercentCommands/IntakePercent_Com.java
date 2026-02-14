@@ -2,26 +2,28 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.PercentCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSub;
+import frc.robot.subsystems.IntakeSub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IncrementSlowDown_Com extends Command {
+public class IntakePercent_Com extends Command {
   /** Creates a new IntakePercent_Com. */
-  private ShooterSub m_shooter; 
+  IntakeSub m_intakeSub; 
+  double m_percent; 
 
-  public IncrementSlowDown_Com(ShooterSub shooter) {
+  public IntakePercent_Com(IntakeSub intakeSub, double percent) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_shooter = shooter; 
-    addRequirements(m_shooter);
+    m_intakeSub = intakeSub;
+    m_percent = percent; 
+    addRequirements(intakeSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.incrementSlowDown();
+    m_intakeSub.setPercentage_func(m_percent);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -30,7 +32,9 @@ public class IncrementSlowDown_Com extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_intakeSub.setPercentage_func(0);
+  }
 
   // Returns true when the command should end.
   @Override

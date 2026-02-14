@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -47,6 +49,17 @@ public class ClimberSub extends SubsystemBase {
     climberMotor2CFGapply.setSlot0(climberMotor2Config.slot0);
     climberMotor1CFGapply.applyConfigs();
     climberMotor2CFGapply.applyConfigs();
+  }
+
+  public void setPercentage_func(double percentage) {
+    climberMotor1.setControl(new DutyCycleOut(percentage)); 
+    climberMotor2.setControl(new DutyCycleOut(-percentage));
+  }
+
+  public void setPosition_func(double pos) {
+    //climberMotor2.setPosition(climberMotor1.getPosition().getValueAsDouble()); 
+    climberMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0)); 
+    climberMotor2.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0)); 
   }
 
   @Override

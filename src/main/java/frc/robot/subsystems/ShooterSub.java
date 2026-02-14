@@ -51,12 +51,9 @@ public class ShooterSub extends SubsystemBase {
     shooterMotor2.set(-targetSpeed); 
   }
 
-  public void incrementSpeedUp() {
-    targetSpeed += 0.03; 
-  }
-
-  public void incrementSlowDown() {
-    targetSpeed -= 0.03; 
+  public void incrementSpeedUp(double increment) {
+    targetSpeed += increment; 
+    System.out.println(targetSpeed);
   }
 
   @Override
