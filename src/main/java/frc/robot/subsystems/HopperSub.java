@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,6 +38,11 @@ public class HopperSub extends SubsystemBase {
 
   public HopperSub(Config hopperConfig) {
     this.hopperConfig = hopperConfig; 
+  }
+
+  public void setPercentage_func(double percentage) {
+    hopperMotor1.setControl(new DutyCycleOut(percentage));
+    hopperMotor2.setControl(new DutyCycleOut(percentage)); 
   }
 
   @Override

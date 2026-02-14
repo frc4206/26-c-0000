@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.CANcoder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
@@ -32,12 +34,12 @@ public class IntakeSub extends SubsystemBase {
   ConfigTalonFX intakePivotMotor2CFGapply = new ConfigTalonFX(intakePivotMotor2Config, intakePivotMotor1);
 
   /* Sensors */
-  //input encoder here 
+  CANcoder intakeCANcoder;  
 
   public static class Config extends LoadableConfig {
 
     /* IDs and Ports */
-    //input enocder here 
+    public int intakeCANcoderID; 
 
     /* Positions */
     public double stowPosition; 
@@ -56,12 +58,17 @@ public class IntakeSub extends SubsystemBase {
 
   public IntakeSub(Config intakeConfig) {
     this.intakeConfig = intakeConfig; 
-    //encoder here 
+    intakeCANcoder = new CANcoder(intakeConfig.intakeCANcoderID, "Default Name"); 
 
     intakePivotMotor1CFGapply.setSlot0(intakePivotMotor1Config.slot0);
     intakePivotMotor2CFGapply.setSlot0(intakePivotMotor2Config.slot0); 
     intakePivotMotor1CFGapply.applyConfigs();
     intakePivotMotor2CFGapply.applyConfigs();
+  }
+
+  public void setPercentage_func(double percentage) {
+    intakeRollersMotor1.setControl(new DutyCycleOut(percentage)); 
+    intakeRollersMotor2.setControl(new DutyCycleOut(percentage)); 
   }
 
   @Override

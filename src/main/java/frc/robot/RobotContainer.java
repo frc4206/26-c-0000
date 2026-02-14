@@ -16,10 +16,24 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
+import frc.robot.commands.ShooterPercent_Com;
+import frc.robot.commands.IncrementSpeedTesting_Com;
+import frc.robot.commands.IncrementSlowDown_Com;
+import frc.robot.commands.IncrementSpeedUp_Com;
+
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ShooterSub;
 
 public class RobotContainer {
+    /* Subsystems */
+    public final ShooterSub.Config m_shooterConfig = new ShooterSub.Config("Shooter.toml");
+
+    final ShooterSub m_shooter = new ShooterSub(m_shooterConfig); 
+
+
+    private final CommandXboxController m_shooterController = new CommandXboxController(1);
+
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
@@ -73,8 +87,16 @@ public class RobotContainer {
 
         // Reset the field-centric heading on left bumper press.
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        m_shooterController.y().onTrue(new ShooterPercent_Com(m_shooter, 0));
+        m_shooterController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
+        m_shooterController.x().onTrue(new IncrementSpeedUp_Com(m_shooter)); 
+        m_shooterController.b().onTrue(new IncrementSlowDown_Com(m_shooter));
+
+
+
+
     }
 
     public Command getAutonomousCommand() {

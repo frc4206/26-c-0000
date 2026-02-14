@@ -1,4 +1,4 @@
-# encoder goes here 
+intakeCANcoderID = 24
 
 stowPosition = 0.0
 homePosition = 0.0

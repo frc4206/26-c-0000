@@ -14,6 +14,8 @@ import frc.robot.common.ConfigTalonFX.Config;
 
 public class ShooterSub extends SubsystemBase {
   /** Creates a new ShooterSub. */
+  public double targetSpeed = 0.05; 
+
   /* Configs */
   ConfigTalonFX.Config shooterMotor1Config = new ConfigTalonFX.Config("ShooterMotor1.toml");
   ConfigTalonFX.Config shooterMotor2Config = new ConfigTalonFX.Config("ShooterMotor2.toml");
@@ -37,6 +39,24 @@ public class ShooterSub extends SubsystemBase {
 
   public ShooterSub(Config shooterConfig) {
     this.shooterConfig = shooterConfig; 
+  }
+
+  public void setPercentage_func(double percentage) {
+    shooterMotor1.set(percentage); 
+    shooterMotor2.set(-percentage);
+  }
+
+  public void incrementSpeedTesting() {
+    shooterMotor1.set(targetSpeed); 
+    shooterMotor2.set(-targetSpeed); 
+  }
+
+  public void incrementSpeedUp() {
+    targetSpeed += 0.03; 
+  }
+
+  public void incrementSlowDown() {
+    targetSpeed -= 0.03; 
   }
 
   @Override
