@@ -16,14 +16,14 @@ import frc.robot.common.ConfigTalonFX.Config;
 public class HopperSub extends SubsystemBase {
   /** Creates a new HopperSub. */
   /* Configs */
-  ConfigTalonFX.Config hopperMotor1Config = new ConfigTalonFX.Config("hopperMotor1.toml"); 
-  ConfigTalonFX.Config hopperMotor2Config = new ConfigTalonFX.Config("hopperMotor2.toml");
+  ConfigTalonFX.Config hopperMotor1Config = new ConfigTalonFX.Config("HopperMotor1.toml"); 
+  ConfigTalonFX.Config hopperMotor2Config = new ConfigTalonFX.Config("HopperMotor2.toml");
 
   public Config hopperConfig; 
 
   /* Motors */
-  public TalonFX hopperMotor1 = new TalonFX(hopperMotor1Config.canID, "Default Name"); 
-  public TalonFX hopperMotor2 = new TalonFX(hopperMotor2Config.canID, "Default Name"); 
+  public TalonFX hopperMotor1 = new TalonFX(hopperMotor1Config.canID, "rio"); 
+  public TalonFX hopperMotor2 = new TalonFX(hopperMotor2Config.canID, "rio"); 
 
   public static class Config extends LoadableConfig {
     /* Misc. */

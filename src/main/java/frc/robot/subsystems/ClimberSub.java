@@ -17,14 +17,14 @@ import frc.robot.common.ConfigTalonFX.Config;
 public class ClimberSub extends SubsystemBase {
   /** Creates a new ClimberSub. */
   /* Configs */
-  ConfigTalonFX.Config climberMotor1Config = new ConfigTalonFX.Config("climberMotor1.toml");
-  ConfigTalonFX.Config climberMotor2Config = new ConfigTalonFX.Config("climberMotor2.toml"); 
+  ConfigTalonFX.Config climberMotor1Config = new ConfigTalonFX.Config("ClimberMotor1.toml");
+  ConfigTalonFX.Config climberMotor2Config = new ConfigTalonFX.Config("ClimberMotor2.toml"); 
 
   public Config climberConfig; 
 
   /* Motors */
-  public TalonFX climberMotor1 = new TalonFX(climberMotor1Config.canID, "Default Name"); 
-  public TalonFX climberMotor2 = new TalonFX(climberMotor2Config.canID, "Default Name"); 
+  public TalonFX climberMotor1 = new TalonFX(climberMotor1Config.canID, "rio"); 
+  public TalonFX climberMotor2 = new TalonFX(climberMotor2Config.canID, "rio"); 
 
   ConfigTalonFX climberMotor1CFGapply = new ConfigTalonFX(climberMotor1Config, climberMotor1);
   ConfigTalonFX climberMotor2CFGapply = new ConfigTalonFX(climberMotor2Config, climberMotor1);
