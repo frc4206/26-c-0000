@@ -23,7 +23,7 @@ public class IntakePercent_Com extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intakeSub.setPercentage_func(m_percent);
+    m_intakeSub.setPercentageRollers_func(m_percent);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,7 +33,7 @@ public class IntakePercent_Com extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intakeSub.setPercentage_func(0);
+    m_intakeSub.setPercentageRollers_func(0);
   }
 
   // Returns true when the command should end.

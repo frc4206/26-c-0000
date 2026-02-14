@@ -1,7 +1,7 @@
-name = "IntakePivotMotor1"
+name = "IntakePivotMotor"
 canID = 22
 inverted = false
-isBreakMode = false
+isBreakMode = true
 
 [slot0]
 kp = 0.0

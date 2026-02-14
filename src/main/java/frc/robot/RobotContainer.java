@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.commands.IncrementSpeedTesting_Com;
 import frc.robot.commands.IncrementSpeedUp_Com;
+import frc.robot.commands.IntakeJoystick_Com;
+import frc.robot.commands.ParrellelShoot_Com;
 import frc.robot.commands.ClimberJoystick_Com;
 import frc.robot.commands.PercentCommands.*;
 
@@ -44,8 +46,7 @@ public class RobotContainer {
     final IntakeSub m_intake = new IntakeSub(m_intakeConfig); 
 
 
-    private final CommandXboxController m_shooterController = new CommandXboxController(1);
-    private final CommandXboxController m_climberController = new CommandXboxController(2); 
+    private final CommandXboxController m_testingController = new CommandXboxController(2);
 
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -102,12 +103,17 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        m_shooterController.y().onTrue(new ShooterPercent_Com(m_shooter, 0));
-        m_shooterController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
-        m_shooterController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.03)); 
-        m_shooterController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03));
+        m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 0));
+        m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
+        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.03)); 
+        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03)); 
+        m_testingController.rightBumper().onTrue(new ParrellelShoot_Com(m_hopper, m_shooter));
 
-        m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
+        m_testingController.leftBumper().onTrue(new IntakePercent_Com(m_intake, m_intakeConfig.intakePercent));
+        m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
+        
+
+        m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_testingController));
 
 
     }

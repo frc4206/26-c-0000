@@ -1,8 +1,8 @@
-intakeCANcoderID = 24
+intakeCANcoderID = 23
 
 stowPosition = 0.0
 homePosition = 0.0
 intakePosition = 0.0 
 
-intakePercent = 0.0
-outtakePercent = 0.0 
+intakePercent = 0.6
+outtakePercent = -0.6

@@ -20,19 +20,16 @@ public class IntakeSub extends SubsystemBase {
   /* Configs */
   ConfigTalonFX.Config intakeRollersMotor1Config = new ConfigTalonFX.Config("IntakeRollersMotor1.toml");
   ConfigTalonFX.Config intakeRollersMotor2Config = new ConfigTalonFX.Config("IntakeRollersMotor2.toml");
-  ConfigTalonFX.Config intakePivotMotor1Config = new ConfigTalonFX.Config("IntakePivotMotor1.toml");
-  ConfigTalonFX.Config intakePivotMotor2Config = new ConfigTalonFX.Config("IntakePivotMotor2.toml"); 
+  ConfigTalonFX.Config intakePivotMotorConfig = new ConfigTalonFX.Config("IntakePivotMotor.toml");
 
   public Config intakeConfig; 
 
   /* Motors */
   public TalonFX intakeRollersMotor1 = new TalonFX(intakeRollersMotor1Config.canID, "Default Name"); 
   public TalonFX intakeRollersMotor2 = new TalonFX(intakeRollersMotor2Config.canID, "Default Name"); 
-  public TalonFX intakePivotMotor1 = new TalonFX(intakePivotMotor1Config.canID, "Default Name");
-  public TalonFX intakePivotMotor2 = new TalonFX(intakePivotMotor2Config.canID, "Default Name"); 
+  public TalonFX intakePivotMotor = new TalonFX(intakePivotMotorConfig.canID, "Default Name");
 
-  ConfigTalonFX intakePivotMotor1CFGapply = new ConfigTalonFX(intakePivotMotor1Config, intakePivotMotor1);
-  ConfigTalonFX intakePivotMotor2CFGapply = new ConfigTalonFX(intakePivotMotor2Config, intakePivotMotor1);
+  ConfigTalonFX intakePivotMotor1CFGapply = new ConfigTalonFX(intakePivotMotorConfig, intakePivotMotor);
 
   /* Sensors */
   CANcoder intakeCANcoder;  
@@ -61,21 +58,21 @@ public class IntakeSub extends SubsystemBase {
     this.intakeConfig = intakeConfig; 
     intakeCANcoder = new CANcoder(intakeConfig.intakeCANcoderID, "Default Name"); 
 
-    intakePivotMotor1CFGapply.setSlot0(intakePivotMotor1Config.slot0);
-    intakePivotMotor2CFGapply.setSlot0(intakePivotMotor2Config.slot0); 
+    intakePivotMotor1CFGapply.setSlot0(intakePivotMotorConfig.slot0);
     intakePivotMotor1CFGapply.applyConfigs();
-    intakePivotMotor2CFGapply.applyConfigs();
   }
 
-  public void setPercentage_func(double percentage) {
+  public void setPercentageRollers_func(double percentage) {
     intakeRollersMotor1.setControl(new DutyCycleOut(percentage)); 
-    intakeRollersMotor2.setControl(new DutyCycleOut(percentage)); 
+    intakeRollersMotor2.setControl(new DutyCycleOut(-percentage)); 
+  }
+
+  public void setPercentagePivot_func(double percentage) {
+    intakePivotMotor.setControl(new DutyCycleOut(percentage)); 
   }
 
   public void setPosition_func(double pos) {
-    // intakePivtorMotor2.setPosition(intakePivotMotor1.getPosition().getValueAsDouble()); 
-    intakePivotMotor1.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
-    intakePivotMotor2.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
+    intakePivotMotor.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
   }
 
   @Override

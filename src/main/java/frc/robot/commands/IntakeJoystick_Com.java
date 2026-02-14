@@ -4,38 +4,41 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix6.controls.DutyCycleOut;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.IntakeSub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakePID_Com extends Command {
+public class IntakeJoystick_Com extends Command {
   /** Creates a new IntakePercent_Com. */
   IntakeSub m_intakeSub; 
-  double m_intakePosition; 
+  CommandXboxController m_joystick; 
 
-  public IntakePID_Com(IntakeSub intakeSub, double intakePosition) {
+  public IntakeJoystick_Com(IntakeSub intakeSub, CommandXboxController joystick) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intakeSub = intakeSub; 
-    m_intakePosition = intakePosition; 
-    addRequirements(intakeSub);
+    m_joystick = joystick; 
+    addRequirements(m_intakeSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_intakeSub.setPosition_func(m_intakePosition);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (Math.abs(m_joystick.getRightY()) > 0.1) {
+      m_intakeSub.setPercentagePivot_func(m_joystick.getRightY());
+    } else {
+      m_intakeSub.setPercentagePivot_func(0);
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intakeSub.intakePivotMotor.setControl(new DutyCycleOut(0)); 
+    m_intakeSub.setPercentagePivot_func(0);
   }
 
   // Returns true when the command should end.
