@@ -62,7 +62,7 @@ public class ShooterSub extends SubsystemBase {
 
   public void incrementSpeedUp(double increment) {
     targetSpeed += increment; 
-    System.out.println(targetSpeed);
+    System.out.println("VELOCITY: " + targetSpeed);
   }
 
   public void setToVelocity(double rpm) {

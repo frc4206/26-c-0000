@@ -106,12 +106,13 @@ public class RobotContainer {
 
         m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 0));
         m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
-        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.03)); 
-        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03)); 
-        // m_testingController.rightBumper().onTrue(new ParrellelShoot_Com(m_hopper, m_shooter));
+        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.1)); 
+        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.1)); 
 
-        m_testingController.leftBumper().onTrue(new IntakePercent_Com(m_intake, m_intakeConfig.intakePercent));
-        m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
+        m_testingController.rightBumper().onTrue(new HopperPercent_Com(m_hopper, 1));
+        m_testingController.leftBumper().onTrue(new HopperPercent_Com(m_hopper, 0.0));
+
+        // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
         
 
         m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));

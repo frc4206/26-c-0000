@@ -1,5 +1,5 @@
 name = "HopperMotor1"
-canID = 35
+canID = 40
 inverted = false
 isBreakMode = false
 
