@@ -44,7 +44,7 @@ public class RobotContainer {
     final HopperSub m_hopper = new HopperSub(m_hopperConfig); 
     final IntakeSub m_intake = new IntakeSub(m_intakeConfig); 
 
-
+    /* Joysticks */
     private final CommandXboxController m_testingController = new CommandXboxController(2);
     private final CommandXboxController m_climberController = new CommandXboxController(3); 
 
@@ -103,18 +103,22 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         drivetrain.registerTelemetry(logger::telemeterize);
 
+
+        /* Button Bindings */
         m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 0));
         m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
         m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.1)); 
         m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.1)); 
 
-        m_testingController.rightBumper().onTrue(new HopperPercent_Com(m_hopper, 1));
+        m_testingController.rightBumper().onTrue(new HopperPercent_Com(m_hopper, 0.8));
         m_testingController.leftBumper().onTrue(new HopperPercent_Com(m_hopper, 0.0));
+        m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.6)); 
+        m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0)); 
 
-        // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
+        m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
         
 
-        m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
+        // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
 
 
     }
