@@ -65,10 +65,13 @@ public class ShooterSub extends SubsystemBase {
     System.out.println("VELOCITY: " + targetSpeed);
   }
 
-  public void setToVelocity(double rpm) {
-    double rps = rpm / 60.0; 
-    shooterMotor1.setControl(new VelocityVoltage(rps));
-    shooterMotor2.setControl(new VelocityVoltage(rps));
+  public void setFlywheelSpeed(double velocity, double feedForward) {
+    //the first VelocityVoltage value is 0 because the withVelocity value replaces it anyway, 
+    //      and the withVelocity value is necessary for feedforward. If you take feedforward out 
+    //      then just delete until withSlot and replace the '0' with 'velocity'
+    velocity = velocity / 60; //to get to rps from rpm 
+    shooterMotor1.setControl(new VelocityVoltage(0).withSlot(0).withVelocity(velocity).withFeedForward(feedForward)); 
+    shooterMotor2.setControl(new VelocityVoltage(0).withSlot(0).withVelocity(velocity).withFeedForward(feedForward));
   }
 
   @Override

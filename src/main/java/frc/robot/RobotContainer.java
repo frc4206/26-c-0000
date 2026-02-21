@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.IncrementSpeedTesting_Com;
 import frc.robot.commands.IncrementSpeedUp_Com;
 import frc.robot.commands.IntakeJoystick_Com;
-// import frc.robot.commands.ParrellelShoot_Com;
 import frc.robot.commands.ClimberJoystick_Com;
 import frc.robot.commands.PercentCommands.*;
 
