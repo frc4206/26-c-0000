@@ -1,6 +1,6 @@
 name = "ShooterMotor2"
 canID = 26
-inverted = false
+inverted = true
 isBreakMode = false
 
 [slot0]

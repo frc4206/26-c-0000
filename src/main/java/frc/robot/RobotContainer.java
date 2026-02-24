@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.IncrementSpeedTesting_Com;
 import frc.robot.commands.IncrementSpeedUp_Com;
 import frc.robot.commands.IntakeJoystick_Com;
+import frc.robot.commands.RunFlywheelVoltage;
+import frc.robot.commands.SetFlywheelSpeed_Com;
 import frc.robot.commands.ClimberJoystick_Com;
 import frc.robot.commands.PercentCommands.*;
 
@@ -45,6 +47,7 @@ public class RobotContainer {
     final IntakeSub m_intake = new IntakeSub(m_intakeConfig); 
 
     /* Joysticks */
+    private final CommandXboxController m_driverController = new CommandXboxController(0);
     private final CommandXboxController m_testingController = new CommandXboxController(2);
     private final CommandXboxController m_climberController = new CommandXboxController(3); 
 
@@ -65,6 +68,8 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public RobotContainer() {
+        /* Pathplanner Named Commands */
+
         configureBindings();
     }
 
@@ -105,20 +110,25 @@ public class RobotContainer {
 
 
         /* Button Bindings */
-        m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 0));
-        m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
-        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.1)); 
-        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.1)); 
+        m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 50));
+        // m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
+        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.03)); 
+        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03)); 
+        m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,2500));
+        // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
+
 
         m_testingController.rightBumper().onTrue(new HopperPercent_Com(m_hopper, 0.8));
         m_testingController.leftBumper().onTrue(new HopperPercent_Com(m_hopper, 0.0));
-        m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.6)); 
-        m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0)); 
+        // m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.3)); 
+        // m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0)); 
 
-        m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
+        // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
         
+        // m_driverController.rightTrigger().onTrue(new HopperPercent_Com(m_hopper, 0.9));
+        // m_driverController.leftTrigger().onTrue(new HopperPercent_Com(m_hopper, 0.0));
 
-        // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
+        m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
 
 
     }
