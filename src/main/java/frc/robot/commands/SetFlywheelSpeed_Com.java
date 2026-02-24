@@ -14,20 +14,19 @@ public class SetFlywheelSpeed_Com extends Command {
   /** Creates a new IntakePercent_Com. */
   private ShooterSub m_shooter; 
   double m_targetVelocity; 
-  double m_feedforward; 
 
-  public SetFlywheelSpeed_Com(ShooterSub shooter, double targetVelocity, double feedforward) {
+
+  public SetFlywheelSpeed_Com(ShooterSub shooter, double targetVelocity) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter; 
     m_targetVelocity = targetVelocity; 
-    m_feedforward = feedforward; 
     addRequirements(m_shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.setFlywheelSpeed(m_targetVelocity, m_feedforward);
+    m_shooter.setFlywheelSpeed(m_targetVelocity);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
