@@ -47,7 +47,7 @@ public class RobotContainer {
     final IntakeSub m_intake = new IntakeSub(m_intakeConfig); 
 
     /* Joysticks */
-    private final CommandXboxController m_driverController = new CommandXboxController(0);
+    // private final CommandXboxController m_driverController = new CommandXboxController(0);
     private final CommandXboxController m_testingController = new CommandXboxController(2);
     private final CommandXboxController m_climberController = new CommandXboxController(3); 
 
