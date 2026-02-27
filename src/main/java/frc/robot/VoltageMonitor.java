@@ -8,17 +8,18 @@ import java.util.ArrayDeque;
 public class VoltageMonitor {
 
     private final double batteryResistance;
-    private final PowerDistribution pdh = new PowerDistribution();
+    private PowerDistribution pdh;
 
     // Max history size
-    private static final int MAX_SIZE = 500;
+    private static final int MAX_SIZE = 50;
 
     // Rolling mean state (instance-based now)
     private final ArrayDeque<Double> voltageList = new ArrayDeque<>();
     private double runningSum = 0.0;
 
-    public VoltageMonitor(double batteryResistance) {
+    public VoltageMonitor(double batteryResistance, PowerDistribution pdh) {
         this.batteryResistance = batteryResistance;
+        this.pdh = pdh;
 
         // Add initial voltage reading properly
         double initialVoltage = RobotController.getBatteryVoltage();
@@ -36,6 +37,10 @@ public class VoltageMonitor {
 
         double measuredVoltage = RobotController.getBatteryVoltage();
         double measuredAmps = pdh.getTotalCurrent();
+
+        if (measuredAmps < 1.0d){
+            measuredAmps = 1.0d;
+        }
 
         // V_unloaded = V_measured + I * R
         double calculatedVoltage =

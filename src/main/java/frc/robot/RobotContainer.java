@@ -59,7 +59,7 @@ public class RobotContainer {
     // private final CommandXboxController m_climberController = new
     // CommandXboxController(3);
     public PowerDistribution pdh = new PowerDistribution();
-    public VoltageMonitor voltageMonitor = new VoltageMonitor(0.017d);
+    public VoltageMonitor voltageMonitor = new VoltageMonitor(0.017d, pdh);
 
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
                                                                                         // speed
