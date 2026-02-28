@@ -111,10 +111,10 @@ public class RobotContainer {
 
         /* Button Bindings */
         m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 50));
-        // m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
-        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.03)); 
-        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03)); 
-        m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
+        m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
+        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.01)); 
+        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.01)); 
+        // m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
         // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
 
 
