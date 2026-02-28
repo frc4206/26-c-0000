@@ -6,14 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.List;
-
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,13 +15,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
-import frc.robot.commands.IncrementSpeedTesting_Com;
 import frc.robot.commands.IncrementSpeedUp_Com;
-import frc.robot.commands.IntakeJoystick_Com;
-import frc.robot.commands.RunFlywheelVoltage;
-import frc.robot.commands.SetFlywheelSpeed_Com;
 import frc.robot.commands.autoRangeFire_Com;
 import frc.robot.commands.ClimberJoystick_Com;
 import frc.robot.commands.PercentCommands.*;
@@ -37,13 +24,12 @@ import frc.robot.generated.TunerConstants;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ShooterSub;
+import frc.robot.subsystems.VisionSub;
 import frc.robot.subsystems.ClimberSub;
 import frc.robot.subsystems.HopperSub;
 import frc.robot.subsystems.IntakeSub;
 
 public class RobotContainer {
-
-    PhotonCamera shooterCam = new PhotonCamera("robovikes4206");
     /* Subsystems */
     public final ShooterSub.Config m_shooterConfig = new ShooterSub.Config("Shooter.toml");
     public final ClimberSub.Config m_climberConfig = new ClimberSub.Config("Climber.toml"); 
@@ -54,7 +40,9 @@ public class RobotContainer {
     final ShooterSub m_shooter = new ShooterSub(m_shooterConfig); 
     final ClimberSub m_climber = new ClimberSub(m_climberConfig); 
     final HopperSub m_hopper = new HopperSub(m_hopperConfig); 
-    final IntakeSub m_intake = new IntakeSub(m_intakeConfig); 
+    final IntakeSub m_intake = new IntakeSub(m_intakeConfig);
+    
+    final VisionSub m_vision = new VisionSub("robovikes4206");
 
     /* Joysticks */
     // private final CommandXboxController m_driverController = new CommandXboxController(0);
@@ -83,26 +71,18 @@ public class RobotContainer {
         configureBindings();
     }
 
+    
+
     private void configureBindings() {
-
-        List<PhotonPipelineResult> results = shooterCam.getAllUnreadResults();
-
-      PhotonTrackedTarget target = null;
-     if (!results.isEmpty()) {
-       PhotonPipelineResult result = results.get(results.size() - 1);
-       if (result.hasTargets()) {
-         target = result.getBestTarget();
-       }
-     }
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-m_testingController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-m_testingController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-m_testingController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -137,7 +117,7 @@ public class RobotContainer {
         m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03)); 
         // m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
         // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
-        m_testingController.y().whileTrue(new autoRangeFire_Com(m_shooter, target.bestCameraToTarget.getX()));
+        m_testingController.y().whileTrue(new autoRangeFire_Com(m_shooter, m_vision));
 
         m_testingController.rightBumper().onTrue(new HopperPercent_Com(m_hopper, 0.8));
         m_testingController.leftBumper().onTrue(new HopperPercent_Com(m_hopper, 0.0));

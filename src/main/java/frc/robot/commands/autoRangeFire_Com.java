@@ -6,28 +6,32 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSub;
+import frc.robot.subsystems.VisionSub;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class autoRangeFire_Com extends Command {
   /** Creates a new autoRangeFire_Com. */
-  double m_distance;
   ShooterSub m_shooter;
-  public autoRangeFire_Com(ShooterSub shooter, double distance) {
+  VisionSub m_vision;
+  public autoRangeFire_Com(ShooterSub shooter, VisionSub vision) {
     m_shooter = shooter;
-    m_distance = distance;
+    m_vision = vision;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_shooter);
+    addRequirements(m_shooter, m_vision);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_shooter.autoRangeFire_func(m_distance);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (m_vision.hasTarget()) {
+    double distance = m_vision.getTargetX();
+    m_shooter.autoRangeFire_func(distance);
+}
+  }
 
   // Called once the command ends or is interrupted.
   @Override
