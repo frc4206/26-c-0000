@@ -6,6 +6,12 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.List;
+
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -13,6 +19,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -22,6 +29,7 @@ import frc.robot.commands.IncrementSpeedUp_Com;
 import frc.robot.commands.IntakeJoystick_Com;
 import frc.robot.commands.RunFlywheelVoltage;
 import frc.robot.commands.SetFlywheelSpeed_Com;
+import frc.robot.commands.autoRangeFire_Com;
 import frc.robot.commands.ClimberJoystick_Com;
 import frc.robot.commands.PercentCommands.*;
 
@@ -34,6 +42,8 @@ import frc.robot.subsystems.HopperSub;
 import frc.robot.subsystems.IntakeSub;
 
 public class RobotContainer {
+
+    PhotonCamera shooterCam = new PhotonCamera("robovikes4206");
     /* Subsystems */
     public final ShooterSub.Config m_shooterConfig = new ShooterSub.Config("Shooter.toml");
     public final ClimberSub.Config m_climberConfig = new ClimberSub.Config("Climber.toml"); 
@@ -74,6 +84,17 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+
+        List<PhotonPipelineResult> results = shooterCam.getAllUnreadResults();
+
+      PhotonTrackedTarget target = null;
+     if (!results.isEmpty()) {
+       PhotonPipelineResult result = results.get(results.size() - 1);
+       if (result.hasTargets()) {
+         target = result.getBestTarget();
+       }
+     }
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -92,31 +113,31 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
+        // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
+        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
+        // ));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        // joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        // joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        // joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-        drivetrain.registerTelemetry(logger::telemeterize);
+        // joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        // drivetrain.registerTelemetry(logger::telemeterize);
 
 
         /* Button Bindings */
-        m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 50));
+        // m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 50));
         // m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
         m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.03)); 
         m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03)); 
-        m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
+        // m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
         // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
-
+        m_testingController.y().whileTrue(new autoRangeFire_Com(m_shooter, target.bestCameraToTarget.getX()));
 
         m_testingController.rightBumper().onTrue(new HopperPercent_Com(m_hopper, 0.8));
         m_testingController.leftBumper().onTrue(new HopperPercent_Com(m_hopper, 0.0));
@@ -130,7 +151,7 @@ public class RobotContainer {
 
         m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
 
-
+        m_testingController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
     }
 
     public Command getAutonomousCommand() {
