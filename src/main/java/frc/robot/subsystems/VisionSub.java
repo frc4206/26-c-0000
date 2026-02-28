@@ -38,11 +38,20 @@ public class VisionSub extends SubsystemBase {
         return currentTarget != null;
     }
 
+    //get the fore and aft distance to the target
     public double getTargetX() {
         if (currentTarget != null && currentTarget.bestCameraToTarget != null) {
             return currentTarget.bestCameraToTarget.getX();
         }
         return 0.0;
+    }
+
+    //get the left and right distance to cam center
+    public double getTargetY() {
+      if (currentTarget != null && currentTarget.bestCameraToTarget != null) {
+        return currentTarget.bestCameraToTarget.getY();
+      }
+      return 0.0;
     }
 
     public Optional<PhotonTrackedTarget> getTarget() {
