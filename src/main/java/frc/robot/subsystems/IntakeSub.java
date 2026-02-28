@@ -56,15 +56,15 @@ public class IntakeSub extends SubsystemBase {
 
   public IntakeSub(Config intakeConfig) {
     this.intakeConfig = intakeConfig; 
-    intakeCANcoder = new CANcoder(intakeConfig.intakeCANcoderID, "Default Name"); 
+    intakeCANcoder = new CANcoder(intakeConfig.intakeCANcoderID, "rio"); 
 
     intakePivotMotor1CFGapply.setSlot0(intakePivotMotorConfig.slot0);
     intakePivotMotor1CFGapply.applyConfigs();
   }
 
   public void setPercentageRollers_func(double percentage) {
-    intakeRollersMotor1.setControl(new DutyCycleOut(percentage)); 
-    intakeRollersMotor2.setControl(new DutyCycleOut(-percentage)); 
+    intakeRollersMotor1.setControl(new DutyCycleOut(-percentage)); 
+    // intakeRollersMotor2.setControl(new DutyCycleOut(-percentage)); 
   }
 
   public void setPercentagePivot_func(double percentage) {
