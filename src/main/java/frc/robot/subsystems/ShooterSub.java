@@ -44,10 +44,14 @@ public class ShooterSub extends SubsystemBase {
   public ShooterSub(Config shooterConfig) {
     this.shooterConfig = shooterConfig; 
 
-    shooterMotor1Apply.applyConfigs(); 
-    shooterMotor2Apply.applyConfigs(); 
+    // shooterMotor1Apply
+
+    
+
     shooterMotor1Apply.setSlot0(shooterMotor1Config.slot0); 
     shooterMotor2Apply.setSlot0(shooterMotor2Config.slot0);
+    shooterMotor1Apply.applyConfigs(); 
+    shooterMotor2Apply.applyConfigs(); 
   }
 
   public void setPercentage_func(double percentage) {

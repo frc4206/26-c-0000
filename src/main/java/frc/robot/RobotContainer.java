@@ -112,7 +112,9 @@ public class RobotContainer {
         m_testingController.rightBumper().onTrue(new HopperPercent_Com(m_hopper, 1));
         m_testingController.leftBumper().onTrue(new HopperPercent_Com(m_hopper, 0.0));
 
-        // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
+        m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.6)); 
+        m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0));
+        m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
         
 
         m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
