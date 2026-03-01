@@ -47,7 +47,7 @@ public class RobotContainer {
     final IntakeSub m_intake = new IntakeSub(m_intakeConfig); 
 
     /* Joysticks */
-    // private final CommandXboxController m_driverController = new CommandXboxController(0);
+    private final CommandXboxController m_driverController = new CommandXboxController(0);
     private final CommandXboxController m_testingController = new CommandXboxController(2);
     private final CommandXboxController m_climberController = new CommandXboxController(3); 
 
@@ -110,10 +110,10 @@ public class RobotContainer {
 
 
         /* Button Bindings */
-        m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 50));
-        m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
-        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.01)); 
-        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.01)); 
+        m_driverController.y().onTrue(new ShooterPercent_Com(m_shooter,0)); //STOP CHANGING THIS TO 50. IF YOU WANT IT TO GO TO 50 PRESS A AND INCREMENT LIKE A NORMAL PERSON. THIS BUTTON IS TO STOP THE SHOOTER
+        m_driverController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
+        m_driverController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.01)); 
+        m_driverController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.01)); 
         // m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
         // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
 

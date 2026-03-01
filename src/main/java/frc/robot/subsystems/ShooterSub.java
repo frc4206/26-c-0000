@@ -104,7 +104,7 @@ public class ShooterSub extends SubsystemBase {
     // shooterMotor1.set(targetSpeed);
     // shooterMotor2.set(-targetSpeed);
     shooterMotor1.setControl(new DutyCycleOut(targetSpeed));
-    shooterMotor2.setControl(new DutyCycleOut(targetSpeed));
+    shooterMotor2.setControl(new DutyCycleOut(-targetSpeed));
   }
 
   public void incrementSpeedUp(double increment) {
