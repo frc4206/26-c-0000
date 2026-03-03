@@ -29,7 +29,7 @@ public class IntakeJoystick_Com extends Command {
   @Override
   public void execute() {
     if (Math.abs(m_joystick.getRightY()) > 0.1) {
-      m_intakeSub.setPercentagePivot_func(m_joystick.getRightY() * 0.1);
+      m_intakeSub.setPercentagePivot_func(m_joystick.getRightY() * 0.3);
     } else {
       m_intakeSub.setPercentagePivot_func(0);
     }

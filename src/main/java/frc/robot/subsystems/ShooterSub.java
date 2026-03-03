@@ -22,7 +22,7 @@ import frc.robot.common.ConfigTalonFX.Config;
 
 public class ShooterSub extends SubsystemBase {
   /** Creates a new ShooterSub. */
-  public double targetSpeed = 0.05;
+  public double targetSpeed = 0.5;
 
   public double VOLTAGE_TO_OVERCOME_STATIC_FRICTION = 0.22d; // VOLTS, tested by hand, DO NOT change
   public double VOLTAGE_TO_MAINTAIN_SPEED = 0.15d;

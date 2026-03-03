@@ -110,10 +110,10 @@ public class RobotContainer {
 
 
         /* Button Bindings */
-        m_driverController.y().onTrue(new ShooterPercent_Com(m_shooter,0)); //STOP CHANGING THIS TO 50. IF YOU WANT IT TO GO TO 50 PRESS A AND INCREMENT LIKE A NORMAL PERSON. THIS BUTTON IS TO STOP THE SHOOTER
-        m_driverController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
-        m_driverController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.01)); 
-        m_driverController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.01)); 
+        m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter,0)); //STOP CHANGING THIS TO 50. IF YOU WANT IT TO GO TO 50 PRESS A AND INCREMENT LIKE A NORMAL PERSON. THIS BUTTON IS TO STOP THE SHOOTER
+        m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
+        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.01)); 
+        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.01)); 
         // m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
         // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
 
@@ -123,7 +123,7 @@ public class RobotContainer {
         // m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.3)); 
         // m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0)); 
 
-        m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.6)); 
+        m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.5)); 
         m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0));
         m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
         

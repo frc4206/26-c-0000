@@ -63,8 +63,8 @@ public class IntakeSub extends SubsystemBase {
   }
 
   public void setPercentageRollers_func(double percentage) {
-    intakeRollersMotor1.setControl(new DutyCycleOut(-percentage)); 
-    // intakeRollersMotor2.setControl(new DutyCycleOut(-percentage)); 
+    intakeRollersMotor1.setControl(new DutyCycleOut(percentage)); 
+    intakeRollersMotor2.setControl(new DutyCycleOut(-percentage)); 
   }
 
   public void setPercentagePivot_func(double percentage) {
