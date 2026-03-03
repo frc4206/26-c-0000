@@ -70,6 +70,8 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
+    private double m_targetRPM = 0;
+
     public RobotContainer() {
         /* Pathplanner Named Commands */
         // NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper, 0.8).withTimeout(7.0));
@@ -120,6 +122,21 @@ public class RobotContainer {
         m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
         m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.01)); 
         m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.01)); 
+        
+        /* Increment target RPM */
+        m_testingController.rightBumper().onTrue(
+            new InstantCommand(() -> m_targetRPM += 50)
+        );
+
+        /* Decrement target RPM */
+        m_testingController.leftBumper().onTrue(
+            new InstantCommand(() -> m_targetRPM -= 50)
+        );
+
+        /* Spin flywheel ONLY while Y is held */
+        m_testingController.y().whileTrue(
+            new SetFlywheelSpeed_Com(m_shooter, () -> m_targetRPM)
+        );
         // m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
         // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
 
