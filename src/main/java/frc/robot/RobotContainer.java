@@ -8,11 +8,13 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -23,6 +25,7 @@ import frc.robot.commands.IntakeJoystick_Com;
 import frc.robot.commands.RunFlywheelVoltage;
 import frc.robot.commands.SetFlywheelSpeed_Com;
 import frc.robot.commands.ClimberJoystick_Com;
+import frc.robot.commands.ClimberPID_Com;
 import frc.robot.commands.PercentCommands.*;
 
 import frc.robot.generated.TunerConstants;
@@ -69,6 +72,9 @@ public class RobotContainer {
 
     public RobotContainer() {
         /* Pathplanner Named Commands */
+        NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper, 0.8).withTimeout(7.0));
+        NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter, 0.53).withTimeout(8.0));
+        NamedCommands.registerCommand("ClimberOut", new ClimberPID_Com(m_climber, 0.5)); //This should be tested before it's run
 
         configureBindings();
     }
