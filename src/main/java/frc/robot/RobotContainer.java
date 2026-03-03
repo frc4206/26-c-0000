@@ -72,9 +72,9 @@ public class RobotContainer {
 
     public RobotContainer() {
         /* Pathplanner Named Commands */
-        NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper, 0.8).withTimeout(7.0));
-        NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter, 0.53).withTimeout(8.0));
-        NamedCommands.registerCommand("ClimberOut", new ClimberPID_Com(m_climber, 0.5)); //This should be tested before it's run
+        // NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper, 0.8).withTimeout(7.0));
+        // NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter, 0.53).withTimeout(8.0));
+        // NamedCommands.registerCommand("ClimberOut", new ClimberPID_Com(m_climber, 0.5)); //This should be tested before it's run
 
         configureBindings();
     }
