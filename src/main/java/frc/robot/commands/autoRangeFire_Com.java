@@ -29,6 +29,7 @@ public class autoRangeFire_Com extends Command {
   public void execute() {
     if (m_vision.hasTarget()) {
     double distance = m_vision.getTargetX();
+    System.out.println("Distance: " + distance);
     m_shooter.autoRangeFire_func(distance);
 }
   }

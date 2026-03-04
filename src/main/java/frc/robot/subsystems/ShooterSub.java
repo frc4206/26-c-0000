@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
 import frc.robot.common.ConfigTalonFX.Config;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class ShooterSub extends SubsystemBase {
   /** Creates a new ShooterSub. */
   public double targetSpeed = 0.5;
@@ -38,15 +40,17 @@ public class ShooterSub extends SubsystemBase {
   public TalonFX shooterMotor1 = new TalonFX(shooterMotor1Config.canID, "rio");
   public TalonFX shooterMotor2 = new TalonFX(shooterMotor2Config.canID, "rio");
 
-  // ConfigTalonFX shooterMotor1Apply = new ConfigTalonFX(shooterMotor1Config, shooterMotor1);
-  // ConfigTalonFX shooterMotor2Apply = new ConfigTalonFX(shooterMotor2Config, shooterMotor2);
+  // ConfigTalonFX shooterMotor1Apply = new ConfigTalonFX(shooterMotor1Config,
+  // shooterMotor1);
+  // ConfigTalonFX shooterMotor2Apply = new ConfigTalonFX(shooterMotor2Config,
+  // shooterMotor2);
 
   TalonFXConfiguration motor1config = new TalonFXConfiguration();
   TalonFXConfiguration motor2config = new TalonFXConfiguration();
 
   public InterpolatingDoubleTreeMap autoRangeMap = new InterpolatingDoubleTreeMap();
 
-  
+  private double m_lastPrintTime = 0;
 
   public static class Config extends LoadableConfig {
 
@@ -59,8 +63,12 @@ public class ShooterSub extends SubsystemBase {
     }
   }
 
-  public ShooterSub(Config shooterConfig) {
+  VisionSub m_vision;
+
+  public ShooterSub(Config shooterConfig, VisionSub vision) {
     this.shooterConfig = shooterConfig;
+
+    this.m_vision = vision;
 
     // shooterMotor1Apply.applyConfigs();
 
@@ -90,31 +98,40 @@ public class ShooterSub extends SubsystemBase {
     motor2config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     shooterMotor2.getConfigurator().apply(motor2config);
 
-    //TODO: put this interpolation table into a seperate file!
-    autoRangeMap.put(2.50,0.36);
-    autoRangeMap.put(2.41,0.35);
-    autoRangeMap.put(2.31,0.34);
-    autoRangeMap.put(2.22,0.33);
-    autoRangeMap.put(2.12,0.33);
-    autoRangeMap.put(2.01,0.33);
-    autoRangeMap.put(1.90,0.33);
-    autoRangeMap.put(1.78,0.33);
-    autoRangeMap.put(1.67,0.31);
-    autoRangeMap.put(1.56,0.31);
-    autoRangeMap.put(1.43,0.31);
-    autoRangeMap.put(1.32,0.31);
-    autoRangeMap.put(1.21,0.31);
-    autoRangeMap.put(2.90,0.36);
-    autoRangeMap.put(3.00,0.39);
-    autoRangeMap.put(3.15,0.40);
-    autoRangeMap.put(3.20,0.40);
-    autoRangeMap.put(3.70,0.42);
-    autoRangeMap.put(2.70,0.35);
-    autoRangeMap.put(2.60,0.34);
-    autoRangeMap.put(2.50,0.34);
-    autoRangeMap.put(3.30,0.41);
-    autoRangeMap.put(3.40,0.41);
-    autoRangeMap.put(4.50,0.51);
+    // TODO: put this interpolation table into a seperate file!
+    autoRangeMap.put(2.6, 2150.0);
+    autoRangeMap.put(2.12, 1900.0);
+    autoRangeMap.put(1.83, 1700.0);
+    autoRangeMap.put(1.53, 1650.0);
+    autoRangeMap.put(1.41, 1550.0);
+    autoRangeMap.put(2.89, 2250.0);
+    autoRangeMap.put(4.45,2910.0);
+    autoRangeMap.put(3.06,2350.0);
+    // autoRangeMap.put(2.50, 0.36);
+    // autoRangeMap.put(2.6, 2150);
+    // autoRangeMap.put(2.41, 0.35);
+    // autoRangeMap.put(2.31, 0.34);
+    // autoRangeMap.put(2.22, 0.33);
+    // autoRangeMap.put(2.12, 0.33);
+    // autoRangeMap.put(2.01, 0.33);
+    // autoRangeMap.put(1.90, 0.33);
+    // autoRangeMap.put(1.78, 0.33);
+    // autoRangeMap.put(1.67, 0.31);
+    // autoRangeMap.put(1.56, 0.31);
+    // autoRangeMap.put(1.43, 0.31);
+    // autoRangeMap.put(1.32, 0.31);
+    // autoRangeMap.put(1.21, 0.31);
+    // autoRangeMap.put(2.90, 0.36);
+    // autoRangeMap.put(3.00, 0.39);
+    // autoRangeMap.put(3.15, 0.40);
+    // autoRangeMap.put(3.20, 0.40);
+    // autoRangeMap.put(3.70, 0.42);
+    // autoRangeMap.put(2.70, 0.35);
+    // autoRangeMap.put(2.60, 0.34);
+    // autoRangeMap.put(2.50, 0.34);
+    // autoRangeMap.put(3.30, 0.41);
+    // autoRangeMap.put(3.40, 0.41);
+    // autoRangeMap.put(4.50, 0.51);
 
   }
 
@@ -130,8 +147,9 @@ public class ShooterSub extends SubsystemBase {
     shooterMotor2.setControl(new DutyCycleOut(targetSpeed));
   }
 
-  //! prototype code, probably bad
+  // ! prototype code, probably bad
   public void autoRangeFire_func(double distance) {
+
     shooterMotor1.setControl(new DutyCycleOut(autoRangeMap.get(distance)));
     shooterMotor2.setControl(new DutyCycleOut(autoRangeMap.get(distance)));
     for (int i = 0; i < 10; i++) {
@@ -151,6 +169,14 @@ public class ShooterSub extends SubsystemBase {
     // feedforward out
     // then just delete until withSlot and replace the '0' with 'velocity'
     velocity = velocity / 60; // to get to rps from rpm
+
+    double currentTime = Timer.getFPGATimestamp();
+
+    if (m_vision.hasTarget() && currentTime - m_lastPrintTime >= 0.5) {
+      double distance = m_vision.getTargetX();
+      System.out.println("Distance: " + distance);
+      m_lastPrintTime = currentTime;
+    }
 
     shooterMotor1.setControl(new VelocityVoltage(velocity).withSlot(0));
     shooterMotor2.setControl(new VelocityVoltage(velocity).withSlot(0));

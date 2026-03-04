@@ -41,13 +41,12 @@ public class RobotContainer {
     public final HopperSub.Config m_hopperConfig = new HopperSub.Config("Hopper.toml");
     public final IntakeSub.Config m_intakeConfig = new IntakeSub.Config("Intake.toml");
 
+    final VisionSub m_vision = new VisionSub("frontcam");
 
-    final ShooterSub m_shooter = new ShooterSub(m_shooterConfig); 
+    final ShooterSub m_shooter = new ShooterSub(m_shooterConfig, m_vision); 
     final ClimberSub m_climber = new ClimberSub(m_climberConfig); 
     final HopperSub m_hopper = new HopperSub(m_hopperConfig); 
     final IntakeSub m_intake = new IntakeSub(m_intakeConfig);
-    
-    final VisionSub m_vision = new VisionSub("robovikes4206");
 
     /* Joysticks */
     private final CommandXboxController m_driverController = new CommandXboxController(0);
@@ -136,15 +135,15 @@ public class RobotContainer {
         /* Increment target RPM */
         m_testingController.rightBumper().onTrue(
                 new InstantCommand(() -> {
-                    m_targetRPM += 50;
-                    // System.out.println("Right Bumper Pressed → Target RPM: " + m_targetRPM);
+                    m_targetRPM += 25;
+                    System.out.println("Right Bumper Pressed → Target RPM: " + m_targetRPM);
                 }));
 
         /* Decrement target RPM */
         m_testingController.leftBumper().onTrue(
                 new InstantCommand(() -> {
-                    m_targetRPM -= 50;
-                    // System.out.println("Left Bumper Pressed → Target RPM: " + m_targetRPM);
+                    m_targetRPM -= 25;
+                    System.out.println("Left Bumper Pressed → Target RPM: " + m_targetRPM);
                 }));
 
         /* Spin flywheel ONLY while Y is held */
@@ -164,11 +163,11 @@ public class RobotContainer {
         // 0.0));
         // m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 50));
         // m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
-        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.03)); 
-        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03)); 
+        // m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.03)); 
+        // m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03)); 
         // m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
         // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
-        m_testingController.y().whileTrue(new autoRangeFire_Com(m_shooter, m_vision));
+        // m_testingController.pov(0).whileTrue(new autoRangeFire_Com(m_shooter, m_vision));
 
         // m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.5));
         // m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0));
@@ -179,9 +178,9 @@ public class RobotContainer {
         // m_driverController.leftTrigger().onTrue(new HopperPercent_Com(m_hopper,
         // 0.0));
 
-        m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
+        // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
 
-        m_testingController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
+        // m_testingController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
     }
 
     public Command getAutonomousCommand() {
