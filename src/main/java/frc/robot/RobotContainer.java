@@ -17,21 +17,19 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
-import frc.robot.commands.IncrementSpeedTesting_Com;
 import frc.robot.commands.IncrementSpeedUp_Com;
-import frc.robot.commands.IntakeJoystick_Com;
-import frc.robot.commands.RunFlywheelVoltage;
 import frc.robot.commands.SetFlywheelSpeed_Com;
+import frc.robot.commands.autoRangeFire_Com;
 import frc.robot.commands.ClimberJoystick_Com;
 import frc.robot.commands.ClimberPID_Com;
+import frc.robot.commands.IncrementSpeedTesting_Com;
 import frc.robot.commands.PercentCommands.*;
 
 import frc.robot.generated.TunerConstants;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ShooterSub;
+import frc.robot.subsystems.VisionSub;
 import frc.robot.subsystems.ClimberSub;
 import frc.robot.subsystems.HopperSub;
 import frc.robot.subsystems.IntakeSub;
@@ -43,10 +41,13 @@ public class RobotContainer {
     public final HopperSub.Config m_hopperConfig = new HopperSub.Config("Hopper.toml");
     public final IntakeSub.Config m_intakeConfig = new IntakeSub.Config("Intake.toml");
 
-    final ShooterSub m_shooter = new ShooterSub(m_shooterConfig);
-    final ClimberSub m_climber = new ClimberSub(m_climberConfig);
-    final HopperSub m_hopper = new HopperSub(m_hopperConfig);
+
+    final ShooterSub m_shooter = new ShooterSub(m_shooterConfig); 
+    final ClimberSub m_climber = new ClimberSub(m_climberConfig); 
+    final HopperSub m_hopper = new HopperSub(m_hopperConfig); 
     final IntakeSub m_intake = new IntakeSub(m_intakeConfig);
+    
+    final VisionSub m_vision = new VisionSub("robovikes4206");
 
     /* Joysticks */
     private final CommandXboxController m_driverController = new CommandXboxController(0);
@@ -85,7 +86,10 @@ public class RobotContainer {
         configureBindings();
     }
 
+    
+
     private void configureBindings() {
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -104,20 +108,21 @@ public class RobotContainer {
         RobotModeTriggers.disabled().whileTrue(
                 drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        joystick.b().whileTrue(drivetrain.applyRequest(
-                () -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
+        // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
+        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
+        // ));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        // joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        // joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        // joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-        drivetrain.registerTelemetry(logger::telemeterize);
+        // joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        // drivetrain.registerTelemetry(logger::telemeterize);
 
         /* Button Bindings */
         // m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 0)); // STOP CHANGING THIS TO 50. IF YOU WANT
@@ -157,10 +162,17 @@ public class RobotContainer {
         // 0.3));
         // m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake,
         // 0.0));
+        // m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 50));
+        // m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
+        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.03)); 
+        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.03)); 
+        // m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
+        // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
+        m_testingController.y().whileTrue(new autoRangeFire_Com(m_shooter, m_vision));
 
         // m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.5));
         // m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0));
-        m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
+        // m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
 
         // m_driverController.rightTrigger().onTrue(new HopperPercent_Com(m_hopper,
         // 0.9));
@@ -169,6 +181,7 @@ public class RobotContainer {
 
         m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
 
+        m_testingController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
     }
 
     public Command getAutonomousCommand() {

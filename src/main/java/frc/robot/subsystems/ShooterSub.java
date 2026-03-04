@@ -16,6 +16,7 @@ import com.ctre.phoenix6.controls.compound.Diff_VelocityDutyCycle_Velocity;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.ConfigTalonFX;
 import frc.robot.common.ConfigTalonFX.Config;
@@ -42,6 +43,10 @@ public class ShooterSub extends SubsystemBase {
 
   TalonFXConfiguration motor1config = new TalonFXConfiguration();
   TalonFXConfiguration motor2config = new TalonFXConfiguration();
+
+  public InterpolatingDoubleTreeMap autoRangeMap = new InterpolatingDoubleTreeMap();
+
+  
 
   public static class Config extends LoadableConfig {
 
@@ -85,12 +90,32 @@ public class ShooterSub extends SubsystemBase {
     motor2config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     shooterMotor2.getConfigurator().apply(motor2config);
 
-    // shooterMotor1Apply
+    //TODO: put this interpolation table into a seperate file!
+    autoRangeMap.put(2.50,0.36);
+    autoRangeMap.put(2.41,0.35);
+    autoRangeMap.put(2.31,0.34);
+    autoRangeMap.put(2.22,0.33);
+    autoRangeMap.put(2.12,0.33);
+    autoRangeMap.put(2.01,0.33);
+    autoRangeMap.put(1.90,0.33);
+    autoRangeMap.put(1.78,0.33);
+    autoRangeMap.put(1.67,0.31);
+    autoRangeMap.put(1.56,0.31);
+    autoRangeMap.put(1.43,0.31);
+    autoRangeMap.put(1.32,0.31);
+    autoRangeMap.put(1.21,0.31);
+    autoRangeMap.put(2.90,0.36);
+    autoRangeMap.put(3.00,0.39);
+    autoRangeMap.put(3.15,0.40);
+    autoRangeMap.put(3.20,0.40);
+    autoRangeMap.put(3.70,0.42);
+    autoRangeMap.put(2.70,0.35);
+    autoRangeMap.put(2.60,0.34);
+    autoRangeMap.put(2.50,0.34);
+    autoRangeMap.put(3.30,0.41);
+    autoRangeMap.put(3.40,0.41);
+    autoRangeMap.put(4.50,0.51);
 
-    // shooterMotor1Apply.setSlot0(shooterMotor1Config.slot0);
-    // shooterMotor2Apply.setSlot0(shooterMotor2Config.slot0);
-    // shooterMotor1Apply.applyConfigs();
-    // shooterMotor2Apply.applyConfigs();
   }
 
   public void setPercentage_func(double percentage) {
@@ -102,7 +127,16 @@ public class ShooterSub extends SubsystemBase {
     // shooterMotor1.set(targetSpeed);
     // shooterMotor2.set(-targetSpeed);
     shooterMotor1.setControl(new DutyCycleOut(targetSpeed));
-    shooterMotor2.setControl(new DutyCycleOut(-targetSpeed));
+    shooterMotor2.setControl(new DutyCycleOut(targetSpeed));
+  }
+
+  //! prototype code, probably bad
+  public void autoRangeFire_func(double distance) {
+    shooterMotor1.setControl(new DutyCycleOut(autoRangeMap.get(distance)));
+    shooterMotor2.setControl(new DutyCycleOut(autoRangeMap.get(distance)));
+    for (int i = 0; i < 10; i++) {
+      System.out.println("planned speed: " + autoRangeMap.get(distance));
+    }
   }
 
   public void incrementSpeedUp(double increment) {
