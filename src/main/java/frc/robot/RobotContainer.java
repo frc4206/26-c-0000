@@ -39,23 +39,24 @@ import frc.robot.subsystems.IntakeSub;
 public class RobotContainer {
     /* Subsystems */
     public final ShooterSub.Config m_shooterConfig = new ShooterSub.Config("Shooter.toml");
-    public final ClimberSub.Config m_climberConfig = new ClimberSub.Config("Climber.toml"); 
-    public final HopperSub.Config m_hopperConfig = new HopperSub.Config("Hopper.toml"); 
-    public final IntakeSub.Config m_intakeConfig = new IntakeSub.Config("Intake.toml"); 
+    public final ClimberSub.Config m_climberConfig = new ClimberSub.Config("Climber.toml");
+    public final HopperSub.Config m_hopperConfig = new HopperSub.Config("Hopper.toml");
+    public final IntakeSub.Config m_intakeConfig = new IntakeSub.Config("Intake.toml");
 
-
-    final ShooterSub m_shooter = new ShooterSub(m_shooterConfig); 
-    final ClimberSub m_climber = new ClimberSub(m_climberConfig); 
-    final HopperSub m_hopper = new HopperSub(m_hopperConfig); 
-    final IntakeSub m_intake = new IntakeSub(m_intakeConfig); 
+    final ShooterSub m_shooter = new ShooterSub(m_shooterConfig);
+    final ClimberSub m_climber = new ClimberSub(m_climberConfig);
+    final HopperSub m_hopper = new HopperSub(m_hopperConfig);
+    final IntakeSub m_intake = new IntakeSub(m_intakeConfig);
 
     /* Joysticks */
     private final CommandXboxController m_driverController = new CommandXboxController(0);
     private final CommandXboxController m_testingController = new CommandXboxController(2);
-    private final CommandXboxController m_climberController = new CommandXboxController(3); 
+    private final CommandXboxController m_climberController = new CommandXboxController(3);
 
-    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
+                                                                                        // speed
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
+                                                                                      // max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -70,13 +71,16 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    private double m_targetRPM = 0;
+    private double m_targetRPM = 2000;
 
     public RobotContainer() {
         /* Pathplanner Named Commands */
-        // NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper, 0.8).withTimeout(7.0));
-        // NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter, 0.53).withTimeout(8.0));
-        // NamedCommands.registerCommand("ClimberOut", new ClimberPID_Com(m_climber, 0.5)); //This should be tested before it's run
+        // NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper,
+        // 0.8).withTimeout(7.0));
+        // NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter,
+        // 0.53).withTimeout(8.0));
+        // NamedCommands.registerCommand("ClimberOut", new ClimberPID_Com(m_climber,
+        // 0.5)); //This should be tested before it's run
 
         configureBindings();
     }
@@ -85,25 +89,24 @@ public class RobotContainer {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
+                // Drivetrain will execute this command periodically
+                drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
+                                                                                                   // negative Y
+                                                                                                   // (forward)
+                        .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with
+                                                                                    // negative X (left)
+                ));
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
         final var idle = new SwerveRequest.Idle();
         RobotModeTriggers.disabled().whileTrue(
-            drivetrain.applyRequest(() -> idle).ignoringDisable(true)
-        );
+                drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
+        joystick.b().whileTrue(drivetrain.applyRequest(
+                () -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -116,45 +119,55 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         drivetrain.registerTelemetry(logger::telemeterize);
 
-
         /* Button Bindings */
-        m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter,0)); //STOP CHANGING THIS TO 50. IF YOU WANT IT TO GO TO 50 PRESS A AND INCREMENT LIKE A NORMAL PERSON. THIS BUTTON IS TO STOP THE SHOOTER
-        m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); 
-        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.01)); 
-        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.01)); 
-        
+        // m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 0)); // STOP CHANGING THIS TO 50. IF YOU WANT
+                                                                              // IT TO GO TO 50 PRESS A AND INCREMENT
+                                                                              // LIKE A NORMAL PERSON. THIS BUTTON IS TO
+                                                                              // STOP THE SHOOTER
+        m_testingController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter));
+        m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.01));
+        m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.01));
+
         /* Increment target RPM */
         m_testingController.rightBumper().onTrue(
-            new InstantCommand(() -> m_targetRPM += 50)
-        );
+                new InstantCommand(() -> {
+                    m_targetRPM += 50;
+                    // System.out.println("Right Bumper Pressed → Target RPM: " + m_targetRPM);
+                }));
 
         /* Decrement target RPM */
         m_testingController.leftBumper().onTrue(
-            new InstantCommand(() -> m_targetRPM -= 50)
-        );
+                new InstantCommand(() -> {
+                    m_targetRPM -= 50;
+                    // System.out.println("Left Bumper Pressed → Target RPM: " + m_targetRPM);
+                }));
 
+        /* Spin flywheel ONLY while Y is held */
         /* Spin flywheel ONLY while Y is held */
         m_testingController.y().whileTrue(
             new SetFlywheelSpeed_Com(m_shooter, () -> m_targetRPM)
         );
+
         // m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
         // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
 
+        // m_testingController.rightBumper().onTrue(new HopperPercent_Com(m_hopper, 0.8));
+        // m_testingController.leftBumper().onTrue(new HopperPercent_Com(m_hopper, 0.0));
+        // m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake,
+        // 0.3));
+        // m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake,
+        // 0.0));
 
-        m_testingController.rightBumper().onTrue(new HopperPercent_Com(m_hopper, 0.8));
-        m_testingController.leftBumper().onTrue(new HopperPercent_Com(m_hopper, 0.0));
-        // m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.3)); 
-        // m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0)); 
-
-        m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.5)); 
-        m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0));
+        // m_testingController.rightTrigger().onTrue(new IntakePercent_Com(m_intake, 0.5));
+        // m_testingController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, 0.0));
         m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_testingController));
-        
-        // m_driverController.rightTrigger().onTrue(new HopperPercent_Com(m_hopper, 0.9));
-        // m_driverController.leftTrigger().onTrue(new HopperPercent_Com(m_hopper, 0.0));
+
+        // m_driverController.rightTrigger().onTrue(new HopperPercent_Com(m_hopper,
+        // 0.9));
+        // m_driverController.leftTrigger().onTrue(new HopperPercent_Com(m_hopper,
+        // 0.0));
 
         m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
-
 
     }
 
@@ -162,18 +175,15 @@ public class RobotContainer {
         // Simple drive forward auton
         final var idle = new SwerveRequest.Idle();
         return Commands.sequence(
-            // Reset our field centric heading to match the robot
-            // facing away from our alliance station wall (0 deg).
-            drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-            // Then slowly drive forward (away from us) for 5 seconds.
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(0.5)
-                    .withVelocityY(0)
-                    .withRotationalRate(0)
-            )
-            .withTimeout(5.0),
-            // Finally idle for the rest of auton
-            drivetrain.applyRequest(() -> idle)
-        );
+                // Reset our field centric heading to match the robot
+                // facing away from our alliance station wall (0 deg).
+                drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
+                // Then slowly drive forward (away from us) for 5 seconds.
+                drivetrain.applyRequest(() -> drive.withVelocityX(0.5)
+                        .withVelocityY(0)
+                        .withRotationalRate(0))
+                        .withTimeout(5.0),
+                // Finally idle for the rest of auton
+                drivetrain.applyRequest(() -> idle));
     }
 }

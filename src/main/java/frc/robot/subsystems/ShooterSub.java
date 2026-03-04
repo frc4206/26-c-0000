@@ -37,8 +37,8 @@ public class ShooterSub extends SubsystemBase {
   public TalonFX shooterMotor1 = new TalonFX(shooterMotor1Config.canID, "rio");
   public TalonFX shooterMotor2 = new TalonFX(shooterMotor2Config.canID, "rio");
 
-  ConfigTalonFX shooterMotor1Apply = new ConfigTalonFX(shooterMotor1Config, shooterMotor1);
-  ConfigTalonFX shooterMotor2Apply = new ConfigTalonFX(shooterMotor2Config, shooterMotor2);
+  // ConfigTalonFX shooterMotor1Apply = new ConfigTalonFX(shooterMotor1Config, shooterMotor1);
+  // ConfigTalonFX shooterMotor2Apply = new ConfigTalonFX(shooterMotor2Config, shooterMotor2);
 
   TalonFXConfiguration motor1config = new TalonFXConfiguration();
   TalonFXConfiguration motor2config = new TalonFXConfiguration();
@@ -61,36 +61,36 @@ public class ShooterSub extends SubsystemBase {
 
     motor1config.Slot0.kS = VOLTAGE_TO_OVERCOME_STATIC_FRICTION;
     motor1config.Slot0.kV = VOLTAGE_TO_MAINTAIN_SPEED;
-    motor1config.Slot0.kP = 4.0;
-    motor1config.Slot0.kI = 0;
-    motor1config.Slot0.kD = 0.0;
+    motor1config.Slot0.kP = 0.5d;
+    motor1config.Slot0.kI = 0d;
+    motor1config.Slot0.kD = 0.0d;
     motor1config.CurrentLimits.SupplyCurrentLimit = 60;
     motor1config.CurrentLimits.SupplyCurrentLimitEnable = true;
     motor1config.CurrentLimits.StatorCurrentLimit = 90;
     motor1config.CurrentLimits.StatorCurrentLimitEnable = true;
 
-    motor1config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    motor1config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     shooterMotor1.getConfigurator().apply(motor1config);
 
     motor2config.Slot0.kS = VOLTAGE_TO_OVERCOME_STATIC_FRICTION;
     motor2config.Slot0.kV = VOLTAGE_TO_MAINTAIN_SPEED;
-    motor2config.Slot0.kP = 4.0;
-    motor2config.Slot0.kI = 0;
-    motor2config.Slot0.kD = 0.0;
+    motor2config.Slot0.kP = 0.5d;
+    motor2config.Slot0.kI = 0d;
+    motor2config.Slot0.kD = 0.0d;
     motor2config.CurrentLimits.SupplyCurrentLimit = 60;
     motor2config.CurrentLimits.SupplyCurrentLimitEnable = true;
     motor2config.CurrentLimits.StatorCurrentLimit = 90;
     motor2config.CurrentLimits.StatorCurrentLimitEnable = true;
 
-    motor2config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    motor2config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     shooterMotor2.getConfigurator().apply(motor2config);
 
     // shooterMotor1Apply
 
-    shooterMotor1Apply.setSlot0(shooterMotor1Config.slot0);
-    shooterMotor2Apply.setSlot0(shooterMotor2Config.slot0);
-    shooterMotor1Apply.applyConfigs();
-    shooterMotor2Apply.applyConfigs();
+    // shooterMotor1Apply.setSlot0(shooterMotor1Config.slot0);
+    // shooterMotor2Apply.setSlot0(shooterMotor2Config.slot0);
+    // shooterMotor1Apply.applyConfigs();
+    // shooterMotor2Apply.applyConfigs();
   }
 
   public void setPercentage_func(double percentage) {
@@ -107,7 +107,7 @@ public class ShooterSub extends SubsystemBase {
 
   public void incrementSpeedUp(double increment) {
     targetSpeed += increment;
-    System.out.println("VELOCITY: " + targetSpeed);
+    // System.out.println("VELOCITY: " + targetSpeed);
   }
 
   public void setFlywheelSpeed(double velocity) {

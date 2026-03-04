@@ -33,6 +33,7 @@ public class SetFlywheelSpeed_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // System.out.println("settings speed to " + m_targetVelocity.getAsDouble());
     m_shooter.setFlywheelSpeed(m_targetVelocity.getAsDouble());
   }
 
