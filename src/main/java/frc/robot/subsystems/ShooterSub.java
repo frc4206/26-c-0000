@@ -27,8 +27,8 @@ public class ShooterSub extends SubsystemBase {
   /** Creates a new ShooterSub. */
   public double targetSpeed = 0.5;
 
-  public double VOLTAGE_TO_OVERCOME_STATIC_FRICTION = 0.22d; // VOLTS, tested by hand, DO NOT change
-  public double VOLTAGE_TO_MAINTAIN_SPEED = 0.15d;
+  public double VOLTAGE_TO_OVERCOME_STATIC_FRICTION = 0.32d; // VOLTS, tested by hand, DO NOT change
+  public double VOLTAGE_TO_MAINTAIN_SPEED = 0.13d;
 
   /* Configs */
   ConfigTalonFX.Config shooterMotor1Config = new ConfigTalonFX.Config("ShooterMotor1.toml");
@@ -74,9 +74,9 @@ public class ShooterSub extends SubsystemBase {
 
     motor1config.Slot0.kS = VOLTAGE_TO_OVERCOME_STATIC_FRICTION;
     motor1config.Slot0.kV = VOLTAGE_TO_MAINTAIN_SPEED;
-    motor1config.Slot0.kP = 0.5d;
+    motor1config.Slot0.kP = 0.4d;
     motor1config.Slot0.kI = 0d;
-    motor1config.Slot0.kD = 0.0d;
+    motor1config.Slot0.kD = 0.01d;
     motor1config.CurrentLimits.SupplyCurrentLimit = 60;
     motor1config.CurrentLimits.SupplyCurrentLimitEnable = true;
     motor1config.CurrentLimits.StatorCurrentLimit = 90;
@@ -87,9 +87,9 @@ public class ShooterSub extends SubsystemBase {
 
     motor2config.Slot0.kS = VOLTAGE_TO_OVERCOME_STATIC_FRICTION;
     motor2config.Slot0.kV = VOLTAGE_TO_MAINTAIN_SPEED;
-    motor2config.Slot0.kP = 0.5d;
+    motor2config.Slot0.kP = 0.4d;
     motor2config.Slot0.kI = 0d;
-    motor2config.Slot0.kD = 0.0d;
+    motor2config.Slot0.kD = 0.01d;
     motor2config.CurrentLimits.SupplyCurrentLimit = 60;
     motor2config.CurrentLimits.SupplyCurrentLimitEnable = true;
     motor2config.CurrentLimits.StatorCurrentLimit = 90;
