@@ -8,10 +8,14 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.fasterxml.jackson.databind.util.ClassUtil;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -73,19 +77,20 @@ public class RobotContainer {
 
     private double m_targetRPM = 2000;
 
+    private final SendableChooser<Command> autoChooser; 
+
     public RobotContainer() {
         /* Pathplanner Named Commands */
-        // NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper,
-        // 0.8).withTimeout(7.0));
-        // NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter,
-        // 0.53).withTimeout(8.0));
-        // NamedCommands.registerCommand("ClimberOut", new ClimberPID_Com(m_climber,
-        // 0.5)); //This should be tested before it's run
+        NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper, 0.8).withTimeout(7.0));
+        NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter, 0.53).withTimeout(8.0));
+
 
         configureBindings();
+
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser); 
     }
 
-    
 
     private void configureBindings() {
 
@@ -185,17 +190,19 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // Simple drive forward auton
-        final var idle = new SwerveRequest.Idle();
-        return Commands.sequence(
-                // Reset our field centric heading to match the robot
-                // facing away from our alliance station wall (0 deg).
-                drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-                // Then slowly drive forward (away from us) for 5 seconds.
-                drivetrain.applyRequest(() -> drive.withVelocityX(0.5)
-                        .withVelocityY(0)
-                        .withRotationalRate(0))
-                        .withTimeout(5.0),
-                // Finally idle for the rest of auton
-                drivetrain.applyRequest(() -> idle));
+        // final var idle = new SwerveRequest.Idle();
+        // return Commands.sequence(
+        //         // Reset our field centric heading to match the robot
+        //         // facing away from our alliance station wall (0 deg).
+        //         drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
+        //         // Then slowly drive forward (away from us) for 5 seconds.
+        //         drivetrain.applyRequest(() -> drive.withVelocityX(0.5)
+        //                 .withVelocityY(0)
+        //                 .withRotationalRate(0))
+        //                 .withTimeout(5.0),
+        //         // Finally idle for the rest of auton
+        //         drivetrain.applyRequest(() -> idle));
+
+        return autoChooser.getSelected(); 
     }
 }
