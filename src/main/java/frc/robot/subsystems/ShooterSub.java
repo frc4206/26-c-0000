@@ -152,9 +152,9 @@ public class ShooterSub extends SubsystemBase {
 
     shooterMotor1.setControl(new DutyCycleOut(autoRangeMap.get(distance)));
     shooterMotor2.setControl(new DutyCycleOut(autoRangeMap.get(distance)));
-    for (int i = 0; i < 10; i++) {
-      System.out.println("planned speed: " + autoRangeMap.get(distance));
-    }
+    // for (int i = 0; i < 10; i++) {
+    //   System.out.println("planned speed: " + autoRangeMap.get(distance));
+    // }
   }
 
   public void incrementSpeedUp(double increment) {

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.IncrementSpeedUp_Com;
+import frc.robot.commands.IntakeJoystick_Com;
 import frc.robot.commands.SetFlywheelSpeed_Com;
 import frc.robot.commands.autoRangeFire_Com;
 import frc.robot.commands.ClimberJoystick_Com;
@@ -54,6 +55,7 @@ public class RobotContainer {
 
     /* Joysticks */
     private final CommandXboxController m_driverController = new CommandXboxController(0);
+    private final CommandXboxController m_operatorController = new CommandXboxController(1);
     private final CommandXboxController m_testingController = new CommandXboxController(2);
     private final CommandXboxController m_climberController = new CommandXboxController(3);
 
@@ -129,6 +131,35 @@ public class RobotContainer {
         // drivetrain.registerTelemetry(logger::telemeterize);
 
         /* Button Bindings */
+        m_driverController.rightBumper().toggleOnTrue(new HopperPercent_Com(m_hopper, 0.8));
+        // left stick should be to reset the robot for field oriented
+
+        m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController)); //Left stick
+        m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_operatorController));    //Right stick 
+        m_operatorController.y().onTrue(new ShooterPercent_Com(m_shooter, 0.0)); 
+        // m_operatorController.a().onTrue(new IncrementSpeedTesting_Com(m_shooter)); //Should I have these for back ups if we can't see with the camera?
+        // m_operatorController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.025)); 
+        // m_operatorController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.025));
+        /* Increment target RPM */
+        m_operatorController.x().onTrue(
+                new InstantCommand(() -> {
+                    m_targetRPM += 25;
+                    System.out.println("Right Bumper Pressed → Target RPM: " + m_targetRPM);
+                }));
+
+        /* Decrement target RPM */
+        m_operatorController.b().onTrue(
+                new InstantCommand(() -> {
+                    m_targetRPM -= 25;
+                    System.out.println("Left Bumper Pressed → Target RPM: " + m_targetRPM);
+                }));
+
+        //Changed from whileTrue to onTrue 
+        m_operatorController.a().onTrue(
+            new SetFlywheelSpeed_Com(m_shooter, () -> m_targetRPM)
+        );
+
+
         // m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 0)); // STOP CHANGING THIS TO 50. IF YOU WANT
                                                                               // IT TO GO TO 50 PRESS A AND INCREMENT
                                                                               // LIKE A NORMAL PERSON. THIS BUTTON IS TO
@@ -137,25 +168,7 @@ public class RobotContainer {
         m_testingController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.01));
         m_testingController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.01));
 
-        /* Increment target RPM */
-        m_testingController.rightBumper().onTrue(
-                new InstantCommand(() -> {
-                    m_targetRPM += 25;
-                    System.out.println("Right Bumper Pressed → Target RPM: " + m_targetRPM);
-                }));
 
-        /* Decrement target RPM */
-        m_testingController.leftBumper().onTrue(
-                new InstantCommand(() -> {
-                    m_targetRPM -= 25;
-                    System.out.println("Left Bumper Pressed → Target RPM: " + m_targetRPM);
-                }));
-
-        /* Spin flywheel ONLY while Y is held */
-        /* Spin flywheel ONLY while Y is held */
-        m_testingController.y().whileTrue(
-            new SetFlywheelSpeed_Com(m_shooter, () -> m_targetRPM)
-        );
 
         // m_testingController.a().onTrue(new SetFlywheelSpeed_Com(m_shooter,4000));
         // m_testingController.a().whileTrue(new RunFlywheelVoltage(m_shooter, 0.1));
