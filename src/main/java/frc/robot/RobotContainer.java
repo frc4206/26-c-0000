@@ -137,10 +137,12 @@ public class RobotContainer {
 
         // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController)); //Left stick
         m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_operatorController));    //Right stick 
-        m_operatorController.rightBumper().onTrue(new IntakePercent_Com(m_intake, 0.6)); 
+        m_operatorController.rightBumper().onTrue(new IntakePercent_Com(m_intake, 0.55)); 
         m_operatorController.leftBumper().onTrue(new IntakePercent_Com(m_intake, 0.0));
         m_operatorController.y().onTrue(new ShooterPercent_Com(m_shooter, 0.0)); 
-        m_operatorController.rightTrigger().onTrue(new IncrementSpeedTesting_Com(m_shooter)); //This is just in case
+        m_operatorController.rightTrigger().onTrue(new IncrementSpeedTesting_Com(m_shooter));
+        m_operatorController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, -0.55));
+        //This is just in case
         // m_operatorController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.025)); 
         // m_operatorController.b().onTrue(new IncrementSpeedUp_Com(m_shooter, -0.025));
         /* Increment target RPM */
