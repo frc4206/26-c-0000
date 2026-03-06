@@ -90,7 +90,7 @@ public class RobotContainer {
 
         /* Button Bindings */
         joystick.leftStick().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric)); 
-        
+    
     }
 
     public Command getAutonomousCommand() {
