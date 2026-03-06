@@ -83,8 +83,8 @@ public class RobotContainer {
 
     public RobotContainer() {
         /* Pathplanner Named Commands */
-        NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper, 0.8).withTimeout(7.0));
-        NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter, 0.53).withTimeout(8.0));
+        NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper, 0.80).withTimeout(15.0));
+        NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter, 0.80).withTimeout(15.0));
 
 
         configureBindings();
