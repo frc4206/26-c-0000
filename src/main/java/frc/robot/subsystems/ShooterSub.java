@@ -137,7 +137,7 @@ public class ShooterSub extends SubsystemBase {
 
   public void setPercentage_func(double percentage) {
     shooterMotor1.set(percentage);
-    shooterMotor2.set(-percentage);
+    shooterMotor2.set(percentage);
   }
 
   public void incrementSpeedTesting() {
