@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -25,6 +26,9 @@ public class HopperSub extends SubsystemBase {
   public TalonFX hopperMotor1 = new TalonFX(hopperMotor1Config.canID, "rio"); 
   public TalonFX hopperMotor2 = new TalonFX(hopperMotor2Config.canID, "rio"); 
 
+  TalonFXConfiguration motor1Config = new TalonFXConfiguration(); 
+  TalonFXConfiguration motor2Config = new TalonFXConfiguration(); 
+
   public static class Config extends LoadableConfig {
     /* Misc. */
     public double intakePercent; 
@@ -38,6 +42,18 @@ public class HopperSub extends SubsystemBase {
 
   public HopperSub(Config hopperConfig) {
     this.hopperConfig = hopperConfig; 
+
+    motor1Config.CurrentLimits.SupplyCurrentLimit = 30;
+    motor1Config.CurrentLimits.SupplyCurrentLimitEnable = true; 
+    motor1Config.CurrentLimits.StatorCurrentLimit = 60;
+    motor1Config.CurrentLimits.StatorCurrentLimitEnable = true; 
+    hopperMotor1.getConfigurator().apply(motor1Config);
+
+    motor2Config.CurrentLimits.SupplyCurrentLimit = 30;
+    motor2Config.CurrentLimits.SupplyCurrentLimitEnable = true; 
+    motor2Config.CurrentLimits.StatorCurrentLimit = 60;
+    motor2Config.CurrentLimits.StatorCurrentLimitEnable = true; 
+    hopperMotor2.getConfigurator().apply(motor2Config);
   }
 
   public void setPercentage_func(double percentage) {

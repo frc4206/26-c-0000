@@ -17,13 +17,26 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Hopper"
+                  "name": "Flywheels"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Flywheels"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Hopper"
+                      }
+                    }
+                  ]
                 }
               }
             ]

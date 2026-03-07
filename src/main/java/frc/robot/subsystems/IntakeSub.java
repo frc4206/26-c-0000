@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import org.team4206.battleaid.common.LoadableConfig;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -30,6 +31,9 @@ public class IntakeSub extends SubsystemBase {
   public TalonFX intakePivotMotor = new TalonFX(intakePivotMotorConfig.canID, "rio");
 
   ConfigTalonFX intakePivotMotor1CFGapply = new ConfigTalonFX(intakePivotMotorConfig, intakePivotMotor);
+
+  TalonFXConfiguration motor1Config = new TalonFXConfiguration(); 
+  TalonFXConfiguration motor2Config = new TalonFXConfiguration(); 
 
   /* Sensors */
   CANcoder intakeCANcoder;  
@@ -57,6 +61,18 @@ public class IntakeSub extends SubsystemBase {
   public IntakeSub(Config intakeConfig) {
     this.intakeConfig = intakeConfig; 
     intakeCANcoder = new CANcoder(intakeConfig.intakeCANcoderID, "rio"); 
+
+    motor1Config.CurrentLimits.SupplyCurrentLimit = 60;
+    motor1Config.CurrentLimits.SupplyCurrentLimitEnable = true; 
+    motor1Config.CurrentLimits.StatorCurrentLimit = 90;
+    motor1Config.CurrentLimits.StatorCurrentLimitEnable = true; 
+    intakeRollersMotor1.getConfigurator().apply(motor1Config);
+
+    motor2Config.CurrentLimits.SupplyCurrentLimit = 60;
+    motor2Config.CurrentLimits.SupplyCurrentLimitEnable = true; 
+    motor2Config.CurrentLimits.StatorCurrentLimit = 90;
+    motor2Config.CurrentLimits.StatorCurrentLimitEnable = true; 
+    intakeRollersMotor2.getConfigurator().apply(motor2Config);
 
     intakePivotMotor1CFGapply.setSlot0(intakePivotMotorConfig.slot0);
     intakePivotMotor1CFGapply.applyConfigs();
