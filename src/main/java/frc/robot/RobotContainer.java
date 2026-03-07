@@ -132,7 +132,7 @@ public class RobotContainer {
 
         /* Button Bindings */
         m_driverController.rightBumper().toggleOnTrue(new HopperPercent_Com(m_hopper, 0.8));
-        joystick.leftStick().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric)); 
+        joystick.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric)); 
         
 
         // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController)); //Left stick
