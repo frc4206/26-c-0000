@@ -89,7 +89,7 @@ public class RobotContainer {
        
 
         /* Button Bindings */
-        joystick.leftStick().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric)); 
+        joystick.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric)); 
     
     }
 
