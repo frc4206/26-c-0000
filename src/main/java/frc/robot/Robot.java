@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.HopperSub;
+import frc.robot.subsystems.IntakeSub;
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
@@ -86,6 +88,22 @@ public class Robot extends LoggedRobot {
                 modules[3].getDriveMotor().getSupplyCurrent().getValueAsDouble());
         Logger.recordOutput("Steer/BackRightSupplyCurrent",
                 modules[3].getSteerMotor().getSupplyCurrent().getValueAsDouble());
+
+        
+        HopperSub hopper = m_robotContainer.m_hopper;
+        TalonFX hm1 = hopper.hopperMotor1;
+        TalonFX hm2 = hopper.hopperMotor2;
+
+        Logger.recordOutput("Hopper/Motor1Current", hm1.getStatorCurrent().getValueAsDouble());
+        Logger.recordOutput("Hopper/Motor2Current", hm2.getStatorCurrent().getValueAsDouble());
+
+        IntakeSub intake = m_robotContainer.m_intake;
+        TalonFX im1 = intake.intakeRollersMotor1;
+        TalonFX im2 = intake.intakeRollersMotor2;
+
+        Logger.recordOutput("Intake/Motor1Current", im1.getStatorCurrent().getValueAsDouble());
+        Logger.recordOutput("Intake/Motor2Current", im2.getStatorCurrent().getValueAsDouble());
+
     }
 
     @Override
