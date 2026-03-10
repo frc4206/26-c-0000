@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,11 +53,12 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final static CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     private double m_targetRPM = 2000;
 
     private final SendableChooser<Command> autoChooser; 
+
 
     public RobotContainer() {
         /* Pathplanner Named Commands */
@@ -114,6 +117,6 @@ public class RobotContainer {
     }
 
     public void periodic() {
-        
+
     }
 }
