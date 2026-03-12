@@ -192,6 +192,7 @@ public class ShooterSub extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     // System.out.println("VELOCITY: " + targetSpeed);
+    // System.out.println(m_vision.getTargetX() + ", " + shooterMotor1.getVelocity().getValueAsDouble()*60); 
   }
 
   /** Set the target velocity of the shooter in motor units per 100ms */

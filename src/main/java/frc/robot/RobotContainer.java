@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.IncrementSpeedUp_Com;
 import frc.robot.commands.IntakeJoystick_Com;
+import frc.robot.commands.IntakePID_Com;
 import frc.robot.commands.SetFlywheelSpeed_Com;
 import frc.robot.commands.autoRangeFire_Com;
 import frc.robot.commands.ClimberJoystick_Com;
@@ -77,14 +78,20 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    private double m_targetRPM = 2000;
+    private double m_targetRPM = 2000; //2000
 
     private final SendableChooser<Command> autoChooser; 
 
     public RobotContainer() {
         /* Pathplanner Named Commands */
+        /* Basic: */
         NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper, 0.80).withTimeout(15.0));
-        NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter, 0.80).withTimeout(15.0));
+        NamedCommands.registerCommand("Flywheels", new ShooterPercent_Com(m_shooter, .38).withTimeout(15.0));
+
+        /* Human Player Auto: */
+        NamedCommands.registerCommand("FlywheelsTrench", new ShooterPercent_Com(m_shooter, .51).withTimeout(5.0));
+        NamedCommands.registerCommand("HopperShort", new HopperPercent_Com(m_hopper, 0.90).withTimeout(5));
+
 
 
         configureBindings();
@@ -131,16 +138,16 @@ public class RobotContainer {
         // drivetrain.registerTelemetry(logger::telemeterize);
 
         /* Button Bindings */
-        m_driverController.rightBumper().toggleOnTrue(new HopperPercent_Com(m_hopper, 0.8));
-        joystick.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric)); 
+        m_driverController.rightBumper().toggleOnTrue(new HopperPercent_Com(m_hopper, 1));
+        joystick.b().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric)); 
         
 
         // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController)); //Left stick
         m_intake.setDefaultCommand(new IntakeJoystick_Com(m_intake, m_operatorController));    //Right stick 
-        m_operatorController.rightBumper().toggleOnTrue(new IntakePercent_Com(m_intake, 0.8)); 
+        m_operatorController.rightBumper().toggleOnTrue(new IntakePercent_Com(m_intake, 1)); 
         // m_operatorController.leftBumper().onTrue(new IntakePercent_Com(m_intake, 0.0));
         m_operatorController.y().onTrue(new ShooterPercent_Com(m_shooter, 0.0)); 
-        m_operatorController.rightTrigger().onTrue(new IncrementSpeedTesting_Com(m_shooter));
+        // m_operatorController.rightTrigger().onTrue(new IncrementSpeedTesting_Com(m_shooter));
         m_operatorController.leftTrigger().onTrue(new IntakePercent_Com(m_intake, -0.8));
         //This is just in case
         // m_operatorController.x().onTrue(new IncrementSpeedUp_Com(m_shooter, 0.025)); 

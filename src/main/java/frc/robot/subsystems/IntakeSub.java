@@ -87,6 +87,10 @@ public class IntakeSub extends SubsystemBase {
     intakePivotMotor.setControl(new DutyCycleOut(percentage)); 
   }
 
+  public void setPositionPivot_func(double position) {
+    intakePivotMotor.setControl(new PositionVoltage(0).withPosition(position).withSlot(0));
+  }
+
   public void setPosition_func(double pos) {
     intakePivotMotor.setControl(new PositionVoltage(0).withPosition(pos).withSlot(0));
   }
@@ -94,5 +98,6 @@ public class IntakeSub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // System.out.println(intakeCANcoder.getPosition());
   }
 }
