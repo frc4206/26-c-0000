@@ -170,6 +170,9 @@ public class RobotContainer {
         m_operatorController.a().onTrue(
             new SetFlywheelSpeed_Com(m_shooter, () -> m_targetRPM)
         );
+        
+
+        m_operatorController.pov(0).whileTrue(new autoRangeFire_Com(m_shooter, m_vision));
 
 
         // m_testingController.y().onTrue(new ShooterPercent_Com(m_shooter, 0)); // STOP CHANGING THIS TO 50. IF YOU WANT
@@ -210,7 +213,7 @@ public class RobotContainer {
 
         // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_climberController));
 
-        // m_testingController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
+        m_driverController.a().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().reset()));
     }
 
     public Command getAutonomousCommand() {

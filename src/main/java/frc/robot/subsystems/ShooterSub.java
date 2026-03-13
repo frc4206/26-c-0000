@@ -99,39 +99,40 @@ public class ShooterSub extends SubsystemBase {
     shooterMotor2.getConfigurator().apply(motor2config);
 
     // TODO: put this interpolation table into a seperate file!
-    autoRangeMap.put(2.6, 2150.0);
-    autoRangeMap.put(2.12, 1900.0);
-    autoRangeMap.put(1.83, 1700.0);
-    autoRangeMap.put(1.53, 1650.0);
     autoRangeMap.put(1.41, 1550.0);
+    autoRangeMap.put(1.53, 1650.0);
+    autoRangeMap.put(1.83, 1700.0);
+    autoRangeMap.put(2.12, 1900.0);
+    autoRangeMap.put(2.6, 2150.0);
     autoRangeMap.put(2.89, 2250.0);
-    autoRangeMap.put(4.45,2910.0);
-    autoRangeMap.put(3.06,2350.0);
-    // autoRangeMap.put(2.50, 0.36);
-    // autoRangeMap.put(2.6, 2150);
-    // autoRangeMap.put(2.41, 0.35);
-    // autoRangeMap.put(2.31, 0.34);
-    // autoRangeMap.put(2.22, 0.33);
-    // autoRangeMap.put(2.12, 0.33);
-    // autoRangeMap.put(2.01, 0.33);
-    // autoRangeMap.put(1.90, 0.33);
-    // autoRangeMap.put(1.78, 0.33);
-    // autoRangeMap.put(1.67, 0.31);
-    // autoRangeMap.put(1.56, 0.31);
-    // autoRangeMap.put(1.43, 0.31);
-    // autoRangeMap.put(1.32, 0.31);
-    // autoRangeMap.put(1.21, 0.31);
-    // autoRangeMap.put(2.90, 0.36);
-    // autoRangeMap.put(3.00, 0.39);
-    // autoRangeMap.put(3.15, 0.40);
-    // autoRangeMap.put(3.20, 0.40);
-    // autoRangeMap.put(3.70, 0.42);
-    // autoRangeMap.put(2.70, 0.35);
-    // autoRangeMap.put(2.60, 0.34);
-    // autoRangeMap.put(2.50, 0.34);
-    // autoRangeMap.put(3.30, 0.41);
-    // autoRangeMap.put(3.40, 0.41);
-    // autoRangeMap.put(4.50, 0.51);
+    autoRangeMap.put(3.06,2300.0);
+    autoRangeMap.put(3.38,2325.0);
+    autoRangeMap.put(3.82,2550.0);
+    autoRangeMap.put(4.45,2775.0);
+    // dutyRangeMap.put(2.50, 0.36);
+    // dutyRangeMap.put(2.41, 0.35);
+    // dutyRangeMap.put(2.31, 0.34);
+    // dutyRangeMap.put(2.22, 0.33);
+    // dutyRangeMap.put(2.12, 0.33);
+    // dutyRangeMap.put(2.01, 0.33);
+    // dutyRangeMap.put(1.90, 0.33);
+    // dutyRangeMap.put(1.78, 0.33);
+    // dutyRangeMap.put(1.67, 0.31);
+    // dutyRangeMap.put(1.56, 0.31);
+    // dutyRangeMap.put(1.43, 0.31);
+    // dutyRangeMap.put(1.32, 0.31);
+    // dutyRangeMap.put(1.21, 0.31);
+    // dutyRangeMap.put(2.90, 0.36);
+    // dutyRangeMap.put(3.00, 0.39);
+    // dutyRangeMap.put(3.15, 0.40);
+    // dutyRangeMap.put(3.20, 0.40);
+    // dutyRangeMap.put(3.70, 0.42);
+    // dutyRangeMap.put(2.70, 0.35);
+    // dutyRangeMap.put(2.60, 0.34);
+    // dutyRangeMap.put(2.50, 0.34);
+    // dutyRangeMap.put(3.30, 0.41);
+    // dutyRangeMap.put(3.40, 0.41);
+    // dutyRangeMap.put(4.50, 0.51);
 
   }
 
@@ -147,14 +148,18 @@ public class ShooterSub extends SubsystemBase {
     shooterMotor2.setControl(new DutyCycleOut(targetSpeed));
   }
 
-  // ! prototype code, probably bad
-  public void autoRangeFire_func(double distance) {
+  public void autoRangeFire_dist_func(double distance) {
 
     shooterMotor1.setControl(new DutyCycleOut(autoRangeMap.get(distance)));
     shooterMotor2.setControl(new DutyCycleOut(autoRangeMap.get(distance)));
     // for (int i = 0; i < 10; i++) {
     //   System.out.println("planned speed: " + autoRangeMap.get(distance));
     // }
+  }
+
+  public void autoRangeFire_func(double distance) {
+    shooterMotor1.setControl(new VelocityVoltage(autoRangeMap.get(distance) / 60).withSlot(0));
+    shooterMotor2.setControl(new VelocityVoltage(autoRangeMap.get(distance) / 60).withSlot(0));
   }
 
   public void incrementSpeedUp(double increment) {
