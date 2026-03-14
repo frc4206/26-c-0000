@@ -54,6 +54,15 @@ public class VisionSub extends SubsystemBase {
       return 0.0;
     }
 
+    public double getYaw() {
+      if (currentTarget != null && currentTarget.bestCameraToTarget != null) {
+        var result = camera.getLatestResult(); 
+        double targetYaw = result.getBestTarget().getYaw(); 
+        return targetYaw; 
+      }
+      return 0.0; 
+    }
+
     public double getHubY() {  //todo: get a better id identification system, all the values present on the blue hub below.
         if (currentTarget != null && currentTarget.bestCameraToTarget != null && (currentTarget.getFiducialId()==18||currentTarget.getFiducialId()==19||currentTarget.getFiducialId()==20||currentTarget.getFiducialId()==21||currentTarget.getFiducialId()==22||currentTarget.getFiducialId()==25||currentTarget.getFiducialId()==26||currentTarget.getFiducialId()==27)) {
             return currentTarget.bestCameraToTarget.getY(); //Left Y is pos

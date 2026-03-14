@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.photonvision.PhotonCamera;
 
 import com.ctre.phoenix6.HootAutoReplay;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -19,11 +20,19 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.HopperSub;
 import frc.robot.subsystems.IntakeSub;
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
+
+    private final PhotonCamera camera;
+
+
+    private final CommandXboxController m_driverController = new CommandXboxController(0);
+
 
     private final RobotContainer m_robotContainer;
 
@@ -37,6 +46,8 @@ public class Robot extends LoggedRobot {
     public Robot() {
         m_robotContainer = new RobotContainer();
         modules = m_robotContainer.drivetrain.getModules();
+        camera = new PhotonCamera("frontcam");
+
     }
 
     @Override
@@ -138,7 +149,31 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        double forward = -m_driverController.getLeftY() * 0.1; //kMaxLinearSpeed placeholder
+        double strafe = -m_driverController.getLeftX() * 0.1; //kMaxLinearSpeed placeholder 
+        double turn = -m_driverController.getRightX() * 0.1; //kMaxAngularSpeed placeholder 
+
+        boolean targetVisible = false; 
+        double targetYaw = 0.0; 
+        var results = camera.getAllUnreadResults(); 
+        if (!results.isEmpty()) {
+                var result = results.get(results.size() -1); 
+                if (result.hasTargets()) {
+                        for (var target : result.getTargets()) {
+                                if ((target.getFiducialId() == 25) || (target.getFiducialId() == 26) || (target.getFiducialId() == 9) || (target.getFiducialId() == 10)) {
+                                        targetYaw = target.getYaw(); 
+                                        targetVisible = true; 
+                                }
+                        }
+                }
+        }
+
+        if (m_driverController.a() && targetVisible) {
+
+        }
+
+    }
 
     @Override
     public void teleopExit() {}

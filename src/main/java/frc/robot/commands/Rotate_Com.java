@@ -17,19 +17,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoRotate_Com extends Command {
+public class Rotate_Com extends Command {
   /** Creates a new AutoRotate_Com. */
   public boolean isFinished = false; 
-  PhotonCamera camera = new PhotonCamera("robovikes4206"); //PLACEHOLDER- go find real camera name
+  PhotonCamera camera = new PhotonCamera("frontcam"); 
   PhotonTrackedTarget target; 
   double cameraRobotOffset = 0.0; //go back and measure 
   
   public static class Config extends LoadableConfig {
 
-    double kpy; 
-    double kiy;
-    double kdy; 
-    double kddiff; 
 
     public Config(String filename) {
       super.load(this, filename);
@@ -40,22 +36,12 @@ public class AutoRotate_Com extends Command {
   
   static Config cfg = new Config("Swerve.toml");
   CommandSwerveDrivetrain m_drive; 
-  double MaxSpeed; 
-  double MaxAngularRate; 
-  double error; 
-  double lastError = 0; 
-  double deltaY; 
-  TunedJoystick tj; 
-  double targetYaw = 0.0; 
 
-  public AutoRotate_Com(CommandSwerveDrivetrain drive, double setpointY, double speed, double angularRate, TunedJoystick _tj) {
+
+  public Rotate_Com(CommandSwerveDrivetrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive; 
-    m_setpointY = setpointY; 
-    tj = _tj; 
+    drive = m_drive; 
 
-    MaxSpeed = speed; 
-    MaxAngularRate = angularRate; 
     addRequirements(drive);
   }
 
@@ -66,37 +52,22 @@ public class AutoRotate_Com extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double sag_output = 0.0;
-    double xOutput = 0.0; 
+    // var result = camera.getLatestResult(); 
+    // boolean hasTargets = result.hasTargets(); 
+    // PhotonTrackedTarget target = result.getBestTarget(); 
 
-    var result = camera.getLatestResult(); 
-    boolean hasTargets = result.hasTargets(); 
-    PhotonTrackedTarget target = result.getBestTarget(); 
+    // if (target != null) {
+    //   double yaw_of_qr_code = target.getYaw(); 
 
-    if (target != null) {
-      //X is forward, Y is left, Z is up
-      double distanceToAprilTag = target.getBestCameraToTarget().getX(); 
-      double central_alignment = target.getBestCameraToTarget().getY() - cameraRobotOffset; 
-      double targetYaw = target.getYaw(); 
-      
-      if (distanceToAprilTag >= -0.5d){
-        sag_output = 0.0d; 
-      } else {
-        sag_output = -distanceToAprilTag; 
-      }
+    // }
 
-      if (hasTargets) {
-        central_alignment -= m_setpointY; 
-        xOutput += (central_alignment*cfg.kpy); 
-        double diff = central_alignment - lastError; 
-        xOutput += (diff*cfg.kddiff); 
-        
+    // SwerveRequest.RobotCentric driverequest = new SwerveRequest.RobotCentric().
+    //       withSteerRequestType(null).withRotationalRate(0.5);
 
-      }
+    // // if (!hasTargets && target.getYaw() < 0) {
 
-      SwerveRequest driverequest = new SwerveRequest.RobotCentric().withSteerRequestType(SteerRequestType.Position);
+    // // }
 
-    }
   }
 
   // Called once the command ends or is interrupted.
