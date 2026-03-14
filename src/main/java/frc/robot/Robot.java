@@ -9,12 +9,22 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 
 import com.ctre.phoenix6.HootAutoReplay;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveModule;
+import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -24,17 +34,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.HopperSub;
 import frc.robot.subsystems.IntakeSub;
+import frc.robot.subsystems.VisionSub;
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
 
 
-    
-
     private final CommandXboxController m_driverController = new CommandXboxController(0);
 
 
     private final RobotContainer m_robotContainer;
+
+    public VisionSub m_vision; 
 
     static SwerveModule<TalonFX, TalonFX, CANcoder>[] modules;
 
@@ -115,10 +126,11 @@ public class Robot extends LoggedRobot {
         Logger.recordOutput("Intake/Motor1Current", im1.getStatorCurrent().getValueAsDouble());
         Logger.recordOutput("Intake/Motor2Current", im2.getStatorCurrent().getValueAsDouble());
 
+
     }
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {} 
 
     @Override
     public void disabledPeriodic() {}

@@ -2,10 +2,14 @@ package frc.robot.subsystems;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -13,7 +17,9 @@ public class VisionSub extends SubsystemBase {
 
     private final PhotonCamera camera;
 
-    private PhotonTrackedTarget currentTarget;
+    public PhotonTrackedTarget currentTarget;
+
+    public Pigeon2 pigeon2 = new Pigeon2(14); 
 
     public VisionSub(String cameraName) {
         camera = new PhotonCamera(cameraName);
@@ -64,10 +70,34 @@ public class VisionSub extends SubsystemBase {
     }
 
     public double getHubY() {  //todo: get a better id identification system, all the values present on the blue hub below.
-        if (currentTarget != null && currentTarget.bestCameraToTarget != null && (currentTarget.getFiducialId()==18||currentTarget.getFiducialId()==19||currentTarget.getFiducialId()==20||currentTarget.getFiducialId()==21||currentTarget.getFiducialId()==22||currentTarget.getFiducialId()==25||currentTarget.getFiducialId()==26||currentTarget.getFiducialId()==27)) {
-            return currentTarget.bestCameraToTarget.getY(); //Left Y is pos
+        // if ((Math.abs(currentTarget.bestCameraToTarget.getY()) <= 0.1)) {
+        //     return 0.0; 
+        // }
+        // else {
+        //     return currentTarget.bestCameraToTarget.getY(); 
+        // }
+        double targetYaw = 0.0; 
+        var results = camera.getAllUnreadResults();
+        if (!results.isEmpty()){
+            var result = results.get(results.size() -1); 
+            if (result.hasTargets()) {
+                for (var target : result.getTargets()) {
+                    targetYaw = target.getYaw(); 
+                    if (target.getFiducialId() == 25 || target.getFiducialId() == 18) {
+                        if (target.getYaw() <= 0.2) {
+                            return 0.0; 
+                        }
+                    }
+                }
+            }
         }
-        return 0.0;
+        return currentTarget.bestCameraToTarget.getY(); 
+
+
+        // if (currentTarget != null && currentTarget.bestCameraToTarget != null && (currentTarget.getFiducialId()==18||currentTarget.getFiducialId()==19||currentTarget.getFiducialId()==20||currentTarget.getFiducialId()==22||currentTarget.getFiducialId()==25)) {
+        //     return currentTarget.bestCameraToTarget.getY();
+
+        // }
     }
 
     public Optional<PhotonTrackedTarget> getTarget() {

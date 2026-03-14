@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,7 +19,10 @@ public class TurnToHub_Com extends Command {
   CommandSwerveDrivetrain m_drive;
   VisionSub m_vision;
 
-  PIDController turnPID = new PIDController(6.0, 0.0, 0.11); //these values are pretty good 
+  PhotonTrackedTarget target = new PhotonTrackedTarget(); 
+  PhotonCamera camera = new PhotonCamera("backcam"); 
+
+  PIDController turnPID = new PIDController(5.0, 0.0, 0.05); 
 
   public TurnToHub_Com(CommandSwerveDrivetrain drive, VisionSub vision) {
     this.m_drive = drive;
@@ -24,7 +30,6 @@ public class TurnToHub_Com extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drive, m_vision);
 
-    turnPID.setTolerance(2.0);
   }
 
   // Called when the command is initially scheduled.
@@ -40,8 +45,15 @@ public class TurnToHub_Com extends Command {
             return;
         }
 
+        double rotVelo = 0.0; 
+
         double yToCent = m_vision.getHubY();
-        double rotVelo = turnPID.calculate(yToCent, 0);
+        if (Math.abs(yToCent) <= 0.2) {
+          rotVelo = 0.0; 
+        }
+        else {
+          rotVelo = turnPID.calculate(yToCent, 0);
+        }
 
         //set the speeds of the robot to the calc'd rotational velo
         m_drive.driveRobotRelative(new ChassisSpeeds(0,0,-rotVelo));
