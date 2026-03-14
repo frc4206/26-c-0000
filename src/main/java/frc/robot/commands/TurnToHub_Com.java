@@ -16,7 +16,7 @@ public class TurnToHub_Com extends Command {
   CommandSwerveDrivetrain m_drive;
   VisionSub m_vision;
 
-  PIDController turnPID = new PIDController(1.1, 0.0, 0.0001);
+  PIDController turnPID = new PIDController(6.0, 0.0, 0.11); //these values are pretty good 
 
   public TurnToHub_Com(CommandSwerveDrivetrain drive, VisionSub vision) {
     this.m_drive = drive;
