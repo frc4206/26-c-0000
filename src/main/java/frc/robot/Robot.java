@@ -28,8 +28,8 @@ import frc.robot.subsystems.IntakeSub;
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
 
-    private final PhotonCamera camera;
 
+    
 
     private final CommandXboxController m_driverController = new CommandXboxController(0);
 
@@ -46,7 +46,7 @@ public class Robot extends LoggedRobot {
     public Robot() {
         m_robotContainer = new RobotContainer();
         modules = m_robotContainer.drivetrain.getModules();
-        camera = new PhotonCamera("frontcam");
+
 
     }
 
@@ -150,28 +150,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
-        double forward = -m_driverController.getLeftY() * 0.1; //kMaxLinearSpeed placeholder
-        double strafe = -m_driverController.getLeftX() * 0.1; //kMaxLinearSpeed placeholder 
-        double turn = -m_driverController.getRightX() * 0.1; //kMaxAngularSpeed placeholder 
 
-        boolean targetVisible = false; 
-        double targetYaw = 0.0; 
-        var results = camera.getAllUnreadResults(); 
-        if (!results.isEmpty()) {
-                var result = results.get(results.size() -1); 
-                if (result.hasTargets()) {
-                        for (var target : result.getTargets()) {
-                                if ((target.getFiducialId() == 25) || (target.getFiducialId() == 26) || (target.getFiducialId() == 9) || (target.getFiducialId() == 10)) {
-                                        targetYaw = target.getYaw(); 
-                                        targetVisible = true; 
-                                }
-                        }
-                }
-        }
-
-        if (m_driverController.a() && targetVisible) {
-
-        }
 
     }
 

@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.photonvision.PhotonCamera;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -25,6 +27,7 @@ import frc.robot.commands.IncrementSpeedUp_Com;
 import frc.robot.commands.IntakeJoystick_Com;
 import frc.robot.commands.IntakePID_Com;
 import frc.robot.commands.SetFlywheelSpeed_Com;
+import frc.robot.commands.TurnToHub_Com;
 import frc.robot.commands.autoRangeFire_Com;
 import frc.robot.commands.ClimberJoystick_Com;
 import frc.robot.commands.ClimberPID_Com;
@@ -48,6 +51,8 @@ public class RobotContainer {
     public final IntakeSub.Config m_intakeConfig = new IntakeSub.Config("Intake.toml");
 
     final VisionSub m_vision = new VisionSub("frontcam");
+        // private final PhotonCamera camera;
+
 
     final ShooterSub m_shooter = new ShooterSub(m_shooterConfig, m_vision); 
     final ClimberSub m_climber = new ClimberSub(m_climberConfig); 
@@ -83,6 +88,9 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser; 
 
     public RobotContainer() {
+        // camera = new PhotonCamera("frontcam");
+
+
         /* Pathplanner Named Commands */
         /* Basic: */
         NamedCommands.registerCommand("Hopper", new HopperPercent_Com(m_hopper, 0.80).withTimeout(15.0));
@@ -140,6 +148,7 @@ public class RobotContainer {
         /* Button Bindings */
         m_driverController.rightBumper().toggleOnTrue(new HopperPercent_Com(m_hopper, 1));
         joystick.b().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric)); 
+        m_driverController.leftBumper().whileTrue(new TurnToHub_Com(drivetrain, m_vision));
         
 
         // m_climber.setDefaultCommand(new ClimberJoystick_Com(m_climber, m_operatorController)); //Left stick
