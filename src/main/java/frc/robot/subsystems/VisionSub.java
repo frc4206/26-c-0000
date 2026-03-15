@@ -5,28 +5,51 @@ import java.util.Optional;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.littletonrobotics.junction.Logger;
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class VisionSub extends SubsystemBase {
 
     private final PhotonCamera camera;
-
     public PhotonTrackedTarget currentTarget;
 
     public Pigeon2 pigeon2 = new Pigeon2(14); 
+    private PhotonPoseEstimator photonPoseEstimator; 
+    PhotonPipelineResult result = new PhotonPipelineResult(); 
 
-    public VisionSub(String cameraName) {
+
+
+    private final CommandSwerveDrivetrain m_drivetrain; 
+    PhotonPoseEstimator photonEstimator; 
+    
+
+    public VisionSub(CommandSwerveDrivetrain drivetrain, String cameraName) {
         camera = new PhotonCamera(cameraName);
+        m_drivetrain = drivetrain; 
+
+
     }
 
     @Override
     public void periodic() {
+
+
         List<PhotonPipelineResult> results = camera.getAllUnreadResults();
 
         if (!results.isEmpty()) {
@@ -38,7 +61,9 @@ public class VisionSub extends SubsystemBase {
                 currentTarget = null;
             }
         }
+
     }
+
 
     public boolean hasTarget() {
         return currentTarget != null;

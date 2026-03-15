@@ -50,8 +50,10 @@ public class RobotContainer {
     public final HopperSub.Config m_hopperConfig = new HopperSub.Config("Hopper.toml");
     public final IntakeSub.Config m_intakeConfig = new IntakeSub.Config("Intake.toml");
 
-    final VisionSub m_vision = new VisionSub("backcam");
+
         // private final PhotonCamera camera;
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    final VisionSub m_vision = new VisionSub(drivetrain, "backcam");
 
 
     final ShooterSub m_shooter = new ShooterSub(m_shooterConfig, m_vision); 
@@ -81,7 +83,8 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
+
 
     private double m_targetRPM = 2000; //2000
 
